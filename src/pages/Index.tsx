@@ -6,7 +6,7 @@ import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
 import { ArrowRight, Mail, Github, Linkedin } from "lucide-react";
 import ProjectCard from "@/components/portfolio/ProjectCard";
-
+import StarsOverlay from "@/components/ambient/StarsOverlay";
 const Index = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
 
