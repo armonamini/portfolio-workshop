@@ -57,6 +57,7 @@ const Index = () => {
           />
           <div className="absolute inset-0 bg-[var(--gradient-subtle)]" aria-hidden="true" />
         </div>
+        <StarsOverlay />
 
         {/* Hero section */}
         <section className="container mx-auto pt-16 pb-20 md:pt-28 md:pb-28">

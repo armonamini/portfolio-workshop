@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 273 84% 32%;
+    --background: 230 89% 14%;
     --foreground: 0 0% 98%;
 
     --card: 273 60% 24%;
@@ -53,6 +53,9 @@ All colors MUST be HSL.
     /* Custom design tokens */
     --primary-variant: 264 90% 70%;
     --primary-glow: 280 100% 70%;
+    /* Star colors */
+    --star-gold: 46 94% 41%;
+    --star-magenta: 288 99% 70%;
 
     --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.95), hsl(var(--accent) / 0.95));
     --gradient-subtle: radial-gradient(60% 50% at 70% 20%, hsl(var(--primary) / 0.20), transparent 60%);
@@ -63,7 +66,7 @@ All colors MUST be HSL.
   }
 
 .dark {
-    --background: 273 84% 12%;
+    --background: 230 89% 14%;
     --foreground: 0 0% 98%;
 
     --card: 273 60% 18%;
@@ -108,5 +111,20 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @keyframes star-drift {
+    0%, 100% { transform: translate3d(0,0,0); }
+    50% { transform: translate3d(3px,-6px,0); }
+  }
+  @keyframes comet-fly {
+    0% { transform: translate3d(0,0,0); opacity: 0; }
+    5% { opacity: 1; }
+    100% { transform: translate3d(var(--dx), var(--dy), 0); opacity: 0; }
+  }
+  .animate-shoot {
+    animation: comet-fly var(--dur, 10s) linear forwards;
   }
 }

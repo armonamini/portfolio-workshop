@@ -6,6 +6,8 @@ interface Comet {
   startY: number;
   dx: number;
   dy: number;
+  duration: number;
+  colorVar: "--star-gold" | "--star-magenta";
 }
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -15,7 +17,7 @@ const StarsOverlay: React.FC = () => {
   const idRef = React.useRef(0);
 
   const stars = React.useMemo(() => {
-    const count = 60;
+    const count = 80;
     return new Array(count).fill(0).map((_, i) => ({
       id: i,
       top: Math.random() * 100,
@@ -28,45 +30,64 @@ const StarsOverlay: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    const handler = (e: Event) => {
-      const ce = e as CustomEvent<{ x: number; y: number }>;
-      const targetX = ce.detail?.x ?? window.innerWidth / 2;
-      const targetY = ce.detail?.y ?? window.innerHeight / 2;
+    const timeouts: number[] = [];
 
-      // Choose a random edge start
+    const spawn = () => {
       const edge = Math.floor(Math.random() * 4);
-      let startX = 0, startY = 0;
-      if (edge === 0) { // top
-        startX = randomBetween(0, window.innerWidth);
-        startY = -20;
-      } else if (edge === 1) { // right
-        startX = window.innerWidth + 20;
-        startY = randomBetween(0, window.innerHeight * 0.6);
-      } else if (edge === 2) { // bottom
-        startX = randomBetween(0, window.innerWidth);
-        startY = window.innerHeight + 20;
-      } else { // left
+      let startX = 0, startY = 0, endX = 0, endY = 0;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      if (edge === 0) { // left -> right
         startX = -20;
-        startY = randomBetween(0, window.innerHeight * 0.6);
+        startY = randomBetween(0, h * 0.9);
+        endX = w + 20;
+        endY = startY + randomBetween(-h * 0.2, h * 0.2);
+      } else if (edge === 1) { // right -> left
+        startX = w + 20;
+        startY = randomBetween(0, h * 0.9);
+        endX = -20;
+        endY = startY + randomBetween(-h * 0.2, h * 0.2);
+      } else if (edge === 2) { // top -> bottom
+        startX = randomBetween(0, w);
+        startY = -20;
+        endX = startX + randomBetween(-w * 0.2, w * 0.2);
+        endY = h + 20;
+      } else { // bottom -> top
+        startX = randomBetween(0, w);
+        startY = h + 20;
+        endX = startX + randomBetween(-w * 0.2, w * 0.2);
+        endY = -20;
       }
 
-      const dx = targetX - startX;
-      const dy = targetY - startY;
+      const dx = endX - startX;
+      const dy = endY - startY;
 
       const id = ++idRef.current;
-      setComets((prev) => [...prev, { id, startX, startY, dx, dy }]);
-      // Cleanup after animation ends (~0.9s)
-      window.setTimeout(() => {
+      const duration = randomBetween(8, 14);
+      const colorVar = Math.random() < 0.5 ? "--star-gold" : "--star-magenta";
+
+      setComets((prev) => [...prev, { id, startX, startY, dx, dy, duration, colorVar }]);
+
+      const timeout = window.setTimeout(() => {
         setComets((prev) => prev.filter((c) => c.id !== id));
-      }, 950);
+      }, duration * 1000 + 300);
+      timeouts.push(timeout);
     };
 
-    window.addEventListener("shooting-star", handler as EventListener);
-    return () => window.removeEventListener("shooting-star", handler as EventListener);
+    const interval = window.setInterval(spawn, 2000);
+    for (let i = 0; i < 3; i++) {
+      window.setTimeout(spawn, i * 600);
+    }
+
+    return () => {
+      window.clearInterval(interval);
+      timeouts.forEach((t) => window.clearTimeout(t));
+    };
   }, []);
 
   return (
-    <div className="pointer-events-none absolute inset-0 -z-10">
+    <div className="pointer-events-none absolute inset-0 z-0">
       {/* Small drifting stars */}
       {stars.map((s) => (
         <div
@@ -94,11 +115,24 @@ const StarsOverlay: React.FC = () => {
             left: c.startX,
             ['--dx' as any]: `${c.dx}px`,
             ['--dy' as any]: `${c.dy}px`,
+            ['--dur' as any]: `${c.duration}s`,
+            ['--comet-color' as any]: `var(${c.colorVar})`,
           }}
           aria-hidden="true"
         >
-          <div className="w-1 h-1 rounded-full bg-foreground shadow-[0_0_12px_hsl(var(--accent)/0.8)]" />
-          <div className="-mt-1 -ml-6 h-2 w-8 rotate-[-10deg] bg-gradient-to-r from-foreground/50 to-transparent" />
+          <div
+            className="w-1 h-1 rounded-full"
+            style={{
+              backgroundColor: 'hsl(var(--comet-color))',
+              boxShadow: '0 0 12px hsl(var(--comet-color) / 0.8)',
+            }}
+          />
+          <div
+            className="-mt-1 -ml-6 h-1 w-16"
+            style={{
+              background: 'linear-gradient(90deg, hsl(var(--comet-color)) 0%, hsl(var(--comet-color) / 0) 100%)',
+            }}
+          />
         </div>
       ))}
     </div>
