@@ -1,160 +1,79 @@
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
-import { ArrowRight, Mail, Github, Linkedin } from "lucide-react";
-import ProjectCard from "@/components/portfolio/ProjectCard";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
+
 const Index = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
 
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "Your Name",
+    name: "John",
     url: canonical,
     jobTitle: "Creative Developer",
-    sameAs: [
-      "https://github.com/yourname",
-      "https://www.linkedin.com/in/yourname/"
-    ]
   };
 
   return (
     <>
       <Helmet>
-        <title>Your Name — Creative Developer Portfolio</title>
-        <meta name="description" content="Creative developer portfolio: modern web experiences, performant UI, and polished interactions. Explore selected projects and get in touch." />
+        <title>John's Portfolio — Futuristic Vintage</title>
+        <meta
+          name="description"
+          content="John's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars."
+        />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content="Your Name — Creative Developer Portfolio" />
-        <meta property="og:description" content="Modern web experiences, performant UI, and polished interactions." />
+        <meta property="og:title" content="John's Portfolio — Futuristic Vintage" />
+        <meta
+          property="og:description"
+          content="A minimal home with futuristic vintage vibes and slow shooting stars."
+        />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
-      <header className="relative">
-        <nav className="container mx-auto flex items-center justify-between py-6">
-          <a href="#home" className="text-lg font-semibold tracking-tight text-foreground">Your Name</a>
-          <div className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#projects" className="text-foreground/90 hover:text-foreground transition-colors">Projects</a>
-            <a href="#about" className="text-foreground/90 hover:text-foreground transition-colors">About</a>
-            <a href="#contact" className="text-foreground/90 hover:text-foreground transition-colors">Contact</a>
-          </div>
-        </nav>
-      </header>
-
-      <main id="home" className="relative overflow-hidden">
-        {/* Decorative hero background */}
+      <main id="home" className="relative min-h-screen overflow-hidden">
+        {/* Background image */}
         <div className="absolute inset-0 -z-10">
           <img
             src={heroBg}
-            alt="Abstract purple gradient background with flowing waves"
+            alt="Deep indigo background with subtle gradients"
             className="h-full w-full object-cover opacity-50"
             aria-hidden="true"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-[var(--gradient-subtle)]" aria-hidden="true" />
+          <div className="absolute inset-0" aria-hidden="true" style={{
+            background: 'radial-gradient(60% 50% at 70% 20%, hsl(var(--primary) / 0.18), transparent 60%)'
+          }} />
         </div>
+
+        {/* Ambient stars */}
         <StarsOverlay />
 
-        {/* Hero section */}
-        <section className="container mx-auto pt-16 pb-20 md:pt-28 md:pb-28">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground animate-fade-in-up">
-              Your Name — Creative Developer Portfolio
+        {/* Centered content */}
+        <section className="container mx-auto flex min-h-screen items-center justify-center px-4">
+          <div className="relative w-full max-w-2xl text-center">
+            {/* Subtle scanline / vintage tint */}
+            <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[calc(var(--radius)*1.5)] border border-border/50 bg-card/40 backdrop-blur-md shadow-[var(--shadow-glow)]" />
+            <div className="pointer-events-none absolute -inset-6 -z-20 rounded-[calc(var(--radius)*1.5)]" style={{
+              background: 'repeating-linear-gradient(180deg, hsl(var(--foreground) / 0.02) 0px, hsl(var(--foreground) / 0.02) 1px, transparent 1px, transparent 3px)'
+            }} />
+
+            <h1 className="animate-fade-in text-4xl font-bold tracking-tight md:text-6xl">
+              John's Portfolio
             </h1>
-            <p className="mt-6 text-lg text-foreground/80 max-w-2xl">
-              I craft modern interfaces with clean code, strong aesthetics, and subtle interactions. Explore my selected work and let’s create something memorable.
+            <p className="mx-auto mt-4 max-w-xl text-base text-foreground/80 md:text-lg">
+              A minimal home with a futuristic vintage feel — subtle glow, soft grain, and slow shooting stars.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+
+            <div className="mt-8 flex items-center justify-center">
               <Button asChild size="lg" variant="hero">
-                <a href="#projects" aria-label="View Projects">
-                  View Projects
-                  <ArrowRight className="ml-1" />
-                </a>
+                <a href="/" aria-label="Go to Home">Home</a>
               </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href="#contact" aria-label="Get in touch">
-                  Get in touch
-                </a>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects */}
-        <section id="projects" className="container mx-auto py-12 md:py-20">
-          <header className="mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Selected Projects</h2>
-            <p className="mt-2 text-muted-foreground max-w-2xl">A few highlights showcasing design systems, data viz, and immersive interactions.</p>
-          </header>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <ProjectCard
-              title="Analytics Dashboard"
-              description="A modular, responsive dashboard with real-time charts and theming."
-              image={project1}
-              href="#"
-            />
-            <ProjectCard
-              title="Mobile Commerce"
-              description="Clean, fast, and accessible shopping experience on mobile."
-              image={project2}
-              href="#"
-            />
-            <ProjectCard
-              title="Creative Landing"
-              description="Expressive visuals, strong typography, and subtle motion."
-              image={project3}
-              href="#"
-            />
-          </div>
-        </section>
-
-        {/* About */}
-        <section id="about" className="container mx-auto py-12 md:py-20">
-          <header className="mb-6">
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">About</h2>
-          </header>
-          <div className="max-w-3xl space-y-4 text-foreground/85">
-            <p>
-              I’m a creative developer focused on crafting elegant, performant UIs. My approach blends solid engineering with thoughtful visual design to deliver products that feel effortless.
-            </p>
-            <p>
-              I collaborate with teams to build design systems, animations that respect performance, and delightful micro-interactions.
-            </p>
-          </div>
-        </section>
-
-        {/* Contact */}
-        <section id="contact" className="container mx-auto py-12 md:py-20">
-          <header className="mb-6">
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Contact</h2>
-          </header>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <Button asChild variant="secondary">
-              <a href="mailto:hello@example.com" aria-label="Email me">
-                <Mail className="mr-2" /> hello@example.com
-              </a>
-            </Button>
-            <div className="flex items-center gap-3">
-              <a href="https://github.com/yourname" className="inline-flex items-center gap-2 text-foreground/90 hover:text-foreground transition-colors" aria-label="GitHub">
-                <Github /> GitHub
-              </a>
-              <a href="https://www.linkedin.com/in/yourname/" className="inline-flex items-center gap-2 text-foreground/90 hover:text-foreground transition-colors" aria-label="LinkedIn">
-                <Linkedin /> LinkedIn
-              </a>
             </div>
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-border/60">
-        <div className="container mx-auto py-6 text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Your Name. All rights reserved.
-        </div>
-      </footer>
     </>
   );
 };
