@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
+import Waves from "@/components/ambient/Waves";
 
 const Index = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
@@ -47,8 +48,17 @@ const Index = () => {
           }} />
         </div>
 
+        {/* Ambient waves */}
+        <Waves />
         {/* Ambient stars */}
         <StarsOverlay />
+
+        {/* Background title */}
+        <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
+          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-foreground/5 mix-blend-overlay select-none">
+            John's Portfolio
+          </h1>
+        </div>
 
         {/* Centered content */}
         <section className="container mx-auto flex min-h-screen items-center justify-center px-4">
@@ -59,12 +69,7 @@ const Index = () => {
               background: 'repeating-linear-gradient(180deg, hsl(var(--foreground) / 0.02) 0px, hsl(var(--foreground) / 0.02) 1px, transparent 1px, transparent 3px)'
             }} />
 
-            <h1 className="animate-fade-in text-4xl font-bold tracking-tight md:text-6xl">
-              John's Portfolio
-            </h1>
-            <p className="mx-auto mt-4 max-w-xl text-base text-foreground/80 md:text-lg">
-              A minimal home with a futuristic vintage feel — subtle glow, soft grain, and slow shooting stars.
-            </p>
+            {/* Title moved to background; subtitle removed */}
 
             <div className="mt-8 flex items-center justify-center">
               <Button asChild size="lg" variant="hero">

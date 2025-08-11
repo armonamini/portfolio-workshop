@@ -127,4 +127,28 @@ All colors MUST be HSL.
   .animate-shoot {
     animation: comet-fly var(--dur, 10s) linear forwards;
   }
+
+  /* Curved comets via offset-path */
+  @keyframes comet-curve {
+    0% { offset-distance: 0%; opacity: 0; }
+    5% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+  .animate-comet {
+    animation: comet-curve var(--dur, 10s) linear forwards;
+    offset-rotate: auto;
+    will-change: offset-distance, opacity;
+  }
+
+  /* Ambient wave motion */
+  @keyframes wave-drift-1 {
+    0% { transform: translate3d(-4%, 0, 0) scale(1.05); }
+    50% { transform: translate3d(4%, -1%, 0) scale(1.08); }
+    100% { transform: translate3d(-3%, 0.5%, 0) scale(1.04); }
+  }
+  @keyframes wave-drift-2 {
+    0% { transform: translate3d(3%, 0, 0) scale(1); }
+    50% { transform: translate3d(-5%, 1%, 0) scale(1.06); }
+    100% { transform: translate3d(2%, -0.5%, 0) scale(1.02); }
+  }
 }

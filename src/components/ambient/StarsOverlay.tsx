@@ -106,35 +106,49 @@ const StarsOverlay: React.FC = () => {
       ))}
 
       {/* Comets */}
-      {comets.map((c) => (
-        <div
-          key={c.id}
-          className="absolute will-change-transform animate-shoot"
-          style={{
-            top: c.startY,
-            left: c.startX,
-            ['--dx' as any]: `${c.dx}px`,
-            ['--dy' as any]: `${c.dy}px`,
-            ['--dur' as any]: `${c.duration}s`,
-            ['--comet-color' as any]: `var(${c.colorVar})`,
-          }}
-          aria-hidden="true"
-        >
+      {comets.map((c) => {
+        const mx = c.startX + c.dx / 2;
+        const my = c.startY + c.dy / 2;
+        const len = Math.hypot(c.dx, c.dy) || 1;
+        const nx = -c.dy / len;
+        const ny = c.dx / len;
+        const seeded = (seed: number) => {
+          const x = Math.sin(seed * 12.9898) * 43758.5453;
+          return x - Math.floor(x);
+        };
+        const bend = 80 + seeded(c.id) * 140;
+        const cx = mx + nx * bend;
+        const cy = my + ny * bend;
+        const path = `M ${c.startX} ${c.startY} Q ${cx} ${cy} ${c.startX + c.dx} ${c.startY + c.dy}`;
+
+        return (
           <div
-            className="w-1 h-1 rounded-full"
+            key={c.id}
+            className="absolute animate-comet"
             style={{
-              backgroundColor: 'hsl(var(--comet-color))',
-              boxShadow: '0 0 12px hsl(var(--comet-color) / 0.8)',
+              ['--dur' as any]: `${c.duration}s`,
+              ['--comet-color' as any]: `var(${c.colorVar})`,
+              offsetPath: `path("${path}")` as any,
+              offsetRotate: 'auto' as any,
             }}
-          />
-          <div
-            className="-mt-1 -ml-6 h-1 w-16"
-            style={{
-              background: 'linear-gradient(90deg, hsl(var(--comet-color)) 0%, hsl(var(--comet-color) / 0) 100%)',
-            }}
-          />
-        </div>
-      ))}
+            aria-hidden="true"
+          >
+            <div
+              className="w-1 h-1 rounded-full"
+              style={{
+                backgroundColor: 'hsl(var(--comet-color))',
+                boxShadow: '0 0 12px hsl(var(--comet-color) / 0.8)',
+              }}
+            />
+            <div
+              className="-mt-1 -ml-6 h-1 w-16"
+              style={{
+                background: 'linear-gradient(90deg, hsl(var(--comet-color)) 0%, hsl(var(--comet-color) / 0) 100%)',
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };
