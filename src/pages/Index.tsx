@@ -55,7 +55,7 @@ const Index = () => {
 
         {/* Background title */}
         <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
-          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-foreground/5 mix-blend-overlay select-none animate-title-drift">
+          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-foreground/10 mix-blend-overlay select-none animate-title-drift" style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--accent) / 0.10))' }}>
             John's Portfolio
           </h1>
         </div>
