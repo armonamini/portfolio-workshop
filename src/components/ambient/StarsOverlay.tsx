@@ -124,7 +124,7 @@ const StarsOverlay: React.FC = () => {
         return (
           <div
             key={c.id}
-            className="absolute animate-comet"
+            className="absolute animate-comet flex items-center"
             style={{
               ['--dur' as any]: `${c.duration}s`,
               ['--comet-color' as any]: `var(${c.colorVar})`,
@@ -134,16 +134,17 @@ const StarsOverlay: React.FC = () => {
             aria-hidden="true"
           >
             <div
-              className="w-1 h-1 rounded-full"
+              className="h-0.5 w-20"
               style={{
-                backgroundColor: 'hsl(var(--comet-color))',
-                boxShadow: '0 0 12px hsl(var(--comet-color) / 0.8)',
+                background: 'linear-gradient(270deg, hsl(var(--comet-color)) 0%, hsl(var(--comet-color) / 0) 100%)',
+                filter: 'drop-shadow(0 0 8px hsl(var(--comet-color) / 0.7))',
               }}
             />
             <div
-              className="-mt-1 -ml-6 h-1 w-16"
+              className="w-1 h-1 rounded-full"
               style={{
-                background: 'linear-gradient(90deg, hsl(var(--comet-color)) 0%, hsl(var(--comet-color) / 0) 100%)',
+                backgroundColor: 'hsl(var(--comet-color))',
+                boxShadow: '0 0 12px hsl(var(--comet-color) / 0.9)',
               }}
             />
           </div>

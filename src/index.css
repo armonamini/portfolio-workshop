@@ -151,4 +151,14 @@ All colors MUST be HSL.
     50% { transform: translate3d(-5%, 1%, 0) scale(1.06); }
     100% { transform: translate3d(2%, -0.5%, 0) scale(1.02); }
   }
+
+  /* Background title subtle movement */
+  @keyframes title-drift {
+    0%, 100% { transform: translateY(0); letter-spacing: 0em; opacity: 0.06; }
+    50% { transform: translateY(2px); letter-spacing: 0.02em; opacity: 0.09; }
+  }
+  .animate-title-drift {
+    animation: title-drift 18s ease-in-out infinite;
+    will-change: transform, opacity, letter-spacing;
+  }
 }

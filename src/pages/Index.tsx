@@ -55,7 +55,7 @@ const Index = () => {
 
         {/* Background title */}
         <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
-          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-foreground/5 mix-blend-overlay select-none">
+          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-foreground/5 mix-blend-overlay select-none animate-title-drift">
             John's Portfolio
           </h1>
         </div>
@@ -64,10 +64,6 @@ const Index = () => {
         <section className="container mx-auto flex min-h-screen items-center justify-center px-4">
           <div className="relative w-full max-w-2xl text-center">
             {/* Subtle scanline / vintage tint */}
-            <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[calc(var(--radius)*1.5)] border border-border/50 bg-card/40 backdrop-blur-md shadow-[var(--shadow-glow)]" />
-            <div className="pointer-events-none absolute -inset-6 -z-20 rounded-[calc(var(--radius)*1.5)]" style={{
-              background: 'repeating-linear-gradient(180deg, hsl(var(--foreground) / 0.02) 0px, hsl(var(--foreground) / 0.02) 1px, transparent 1px, transparent 3px)'
-            }} />
 
             {/* Title moved to background; subtitle removed */}
 
