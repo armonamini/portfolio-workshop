@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
@@ -6,6 +7,13 @@ import Waves from "@/components/ambient/Waves";
 
 const Index = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
+
+  const [zoomedOut, setZoomedOut] = useState(false);
+  const pageTitle = zoomedOut ? "Home Page — Futuristic Vintage" : "John's Portfolio — Futuristic Vintage";
+  const pageHeading = zoomedOut ? "Home Page" : "John's Portfolio";
+  const pageDescription = zoomedOut
+    ? "Home Page scene with a futuristic vintage aesthetic and ambient shooting stars."
+    : "John's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars.";
 
   const personSchema = {
     "@context": "https://schema.org",
@@ -18,22 +26,17 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>John's Portfolio — Futuristic Vintage</title>
-        <meta
-          name="description"
-          content="John's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars."
-        />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content="John's Portfolio — Futuristic Vintage" />
-        <meta
-          property="og:description"
-          content="A minimal home with futuristic vintage vibes and slow shooting stars."
-        />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
       <main id="home" className="relative min-h-screen overflow-hidden">
+        <div className={`scene-root ${zoomedOut ? "animate-scene-zoom-out" : ""}`}>
         {/* Background image */}
         <div className="absolute inset-0 -z-10">
           <img
@@ -56,7 +59,7 @@ const Index = () => {
         {/* Background title */}
         <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
           <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] opacity-75 mix-blend-overlay select-none animate-title-drift" style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--title-glow) / 0.25))' }}>
-            John's Portfolio
+            {pageHeading}
           </h1>
         </div>
 
@@ -67,13 +70,16 @@ const Index = () => {
 
             {/* Title moved to background; subtitle removed */}
 
-            <div className="mt-8 flex items-center justify-center">
-              <Button asChild size="lg" variant="hero">
-                <a href="/" aria-label="Go to Home">Home</a>
-              </Button>
-            </div>
+            {!zoomedOut && (
+              <div className="mt-8 flex items-center justify-center">
+                <Button size="lg" variant="hero" onClick={() => setZoomedOut(true)} aria-label="Go to Home">
+                  Home
+                </Button>
+              </div>
+            )}
           </div>
         </section>
+        </div>
       </main>
     </>
   );
