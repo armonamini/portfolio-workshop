@@ -4,7 +4,13 @@ import heroBg from "@/assets/hero-bg.jpg";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
 import Waves from "@/components/ambient/Waves";
 
-const Index = () => {
+interface IndexProps {
+  warpNav: {
+    start: (path: string) => void;
+  };
+}
+
+const Index = ({ warpNav }: IndexProps) => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
 
   const personSchema = {
@@ -80,8 +86,16 @@ const Index = () => {
             {/* Title moved to background; subtitle removed */}
 
             <div className="mt-8 flex items-center justify-center">
-              <Button asChild size="lg" variant="hero">
-                <a href="/" aria-label="Go to Home">Home</a>
+              <Button 
+                size="lg" 
+                variant="hero"
+                onClick={(e) => {
+                  e.preventDefault();
+                  warpNav.start('/home');
+                }}
+                aria-label="Go to Home"
+              >
+                Home
               </Button>
             </div>
           </div>

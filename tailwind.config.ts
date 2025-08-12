@@ -61,6 +61,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				ocean: {
+					900: 'var(--ocean-900)',
+					800: 'var(--ocean-800)',
+					700: 'var(--ocean-700)',
+					600: 'var(--ocean-600)',
+					500: 'var(--ocean-500)',
+					300: 'var(--ocean-300)',
+					200: 'var(--ocean-200)',
+					accent: 'var(--ocean-accent)'
 				}
 			},
 			borderRadius: {
