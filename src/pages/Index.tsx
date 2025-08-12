@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
@@ -7,14 +6,6 @@ import Waves from "@/components/ambient/Waves";
 
 const Index = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
-
-  const [zoomedOut, setZoomedOut] = useState(false);
-  const [anim, setAnim] = useState("");
-  const pageTitle = zoomedOut ? "Home Page — Futuristic Vintage" : "John's Portfolio — Futuristic Vintage";
-  const pageHeading = zoomedOut ? "Home Page" : "John's Portfolio";
-  const pageDescription = zoomedOut
-    ? "Home Page scene with a futuristic vintage aesthetic and ambient shooting stars."
-    : "John's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars.";
 
   const personSchema = {
     "@context": "https://schema.org",
@@ -27,44 +18,22 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
+        <title>John's Portfolio — Futuristic Vintage</title>
+        <meta
+          name="description"
+          content="John's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars."
+        />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
+        <meta property="og:title" content="John's Portfolio — Futuristic Vintage" />
+        <meta
+          property="og:description"
+          content="A minimal home with futuristic vintage vibes and slow shooting stars."
+        />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
       <main id="home" className="relative min-h-screen overflow-hidden">
-        {/* World backdrop with distant hills and embedded Home Page title */}
-        <div className="world-root absolute inset-0 -z-20" aria-hidden="true">
-          <div className={`world-motion ${anim}`}>
-            <div className="world-scene relative left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vh]">
-              <img
-                src={heroBg}
-                alt="Extended indigo sky with distant purple hills"
-                className="absolute inset-0 w-full h-full object-cover opacity-50"
-                loading="eager"
-              />
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(60% 50% at 70% 20%, hsl(var(--primary) / 0.18), transparent 60%)',
-                }}
-              />
-              {/* Home scene title placed on the middle-left hill */}
-              <h2
-                className="absolute left-[22%] top-[42%] -rotate-6 text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] drop-shadow-[0_2px_8px_hsl(var(--title-glow)_/_0.35)] select-none"
-              >
-                Home Page
-              </h2>
-            </div>
-          </div>
-        </div>
-
-        <div className="scene-root">
         {/* Background image */}
         <div className="absolute inset-0 -z-10">
           <img
@@ -84,16 +53,12 @@ const Index = () => {
         {/* Ambient stars */}
         <StarsOverlay />
 
-        {!zoomedOut && (
-          <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
-            <h1
-              className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] opacity-75 mix-blend-overlay select-none animate-title-drift"
-              style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--title-glow) / 0.25))' }}
-            >
-              {"John's Portfolio"}
-            </h1>
-          </div>
-        )}
+        {/* Background title */}
+        <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
+          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] opacity-75 mix-blend-overlay select-none animate-title-drift" style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--title-glow) / 0.25))' }}>
+            John's Portfolio
+          </h1>
+        </div>
 
         {/* Centered content */}
         <section className="container mx-auto flex min-h-screen items-center justify-center px-4">
@@ -102,39 +67,13 @@ const Index = () => {
 
             {/* Title moved to background; subtitle removed */}
 
-            {!zoomedOut && (
-              <div className="mt-8 flex items-center justify-center">
-                <Button
-                  size="lg"
-                  variant="hero"
-                  onClick={() => {
-                    setAnim('animate-world-zoom-in');
-                    setZoomedOut(true);
-                  }}
-                  aria-label="Go to Home"
-                >
-                  Home
-                </Button>
-              </div>
-            )}
+            <div className="mt-8 flex items-center justify-center">
+              <Button asChild size="lg" variant="hero">
+                <a href="/" aria-label="Go to Home">Home</a>
+              </Button>
+            </div>
           </div>
         </section>
-        {zoomedOut && (
-          <div className="fixed bottom-4 left-4 z-10">
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => {
-                setAnim('animate-world-zoom-out');
-                setZoomedOut(false);
-              }}
-              aria-label="Back to landing"
-            >
-              Back
-            </Button>
-          </div>
-        )}
-        </div>
       </main>
     </>
   );
