@@ -30,6 +30,9 @@ const Index = () => {
           content="A minimal home with futuristic vintage vibes and slow shooting stars."
         />
         <meta property="og:type" content="website" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
@@ -55,7 +58,16 @@ const Index = () => {
 
         {/* Background title */}
         <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
-          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] opacity-75 mix-blend-overlay select-none animate-title-drift" style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--title-glow) / 0.25))' }}>
+          <h1 
+            className="mx-auto text-6xl md:text-8xl font-black tracking-wider text-white select-none animate-title-drift" 
+            style={{ 
+              fontFamily: "'Orbitron', monospace",
+              filter: 'drop-shadow(0 6px 30px hsl(var(--accent) / 0.7)) drop-shadow(0 4px 15px hsl(var(--primary) / 0.5))',
+              textShadow: '0 0 40px hsl(var(--accent) / 0.8), 0 0 80px hsl(var(--accent) / 0.5), 0 0 120px hsl(var(--accent) / 0.3)',
+              opacity: 1,
+              mixBlendMode: 'normal'
+            }}
+          >
             John's Portfolio
           </h1>
         </div>
