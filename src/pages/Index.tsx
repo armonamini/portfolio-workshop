@@ -9,6 +9,7 @@ const Index = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
 
   const [zoomedOut, setZoomedOut] = useState(false);
+  const [anim, setAnim] = useState("");
   const pageTitle = zoomedOut ? "Home Page — Futuristic Vintage" : "John's Portfolio — Futuristic Vintage";
   const pageHeading = zoomedOut ? "Home Page" : "John's Portfolio";
   const pageDescription = zoomedOut
@@ -36,7 +37,23 @@ const Index = () => {
       </Helmet>
 
       <main id="home" className="relative min-h-screen overflow-hidden">
-        <div className={`scene-root ${zoomedOut ? "animate-scene-zoom-out" : ""}`}>
+        {/* Extended backdrop revealed on zoom-out */}
+        <div className={`absolute inset-0 -z-20 pointer-events-none transition-opacity duration-700 ${zoomedOut ? "opacity-100" : "opacity-0"}`} aria-hidden="true">
+          <img
+            src={heroBg}
+            alt="Extended indigo sky with distant purple hills"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vh] object-cover opacity-50"
+            loading="eager"
+          />
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(60% 50% at 70% 20%, hsl(var(--primary) / 0.18), transparent 60%)'
+          }} />
+          <div className="absolute inset-0 opacity-60">
+            <Waves />
+          </div>
+        </div>
+
+        <div className={`scene-root ${anim}`}>
         {/* Background image */}
         <div className="absolute inset-0 -z-10">
           <img
@@ -72,13 +89,36 @@ const Index = () => {
 
             {!zoomedOut && (
               <div className="mt-8 flex items-center justify-center">
-                <Button size="lg" variant="hero" onClick={() => setZoomedOut(true)} aria-label="Go to Home">
+                <Button
+                  size="lg"
+                  variant="hero"
+                  onClick={() => {
+                    setAnim('animate-scene-zoom-out');
+                    setZoomedOut(true);
+                  }}
+                  aria-label="Go to Home"
+                >
                   Home
                 </Button>
               </div>
             )}
           </div>
         </section>
+        {zoomedOut && (
+          <div className="fixed bottom-4 left-4 z-10">
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                setAnim('animate-scene-zoom-in');
+                setZoomedOut(false);
+              }}
+              aria-label="Back to landing"
+            >
+              Back
+            </Button>
+          </div>
+        )}
         </div>
       </main>
     </>
