@@ -40,7 +40,7 @@ const Waves: React.FC = () => {
             background:
               "linear-gradient(120deg, hsl(var(--accent) / 0.12) 10%, transparent 50%, transparent 60%, hsl(var(--accent) / 0.10) 90%)",
             backgroundSize: "200% 200%",
-            animation: "shimmer-shift 60s linear infinite",
+            animation: "shimmer-shift 60s linear infinite, glow-breathe 24s ease-in-out infinite",
             mixBlendMode: "screen",
             opacity: 0.3,
             maskImage: "radial-gradient(60% 80% at 50% 50%, white 45%, transparent 85%)",
