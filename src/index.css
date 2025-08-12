@@ -195,4 +195,17 @@ All colors MUST be HSL.
   .scene-root { transform-origin: center; will-change: transform; }
   .animate-scene-zoom-out { animation: scene-zoom-out 1600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
   .animate-scene-zoom-in { animation: scene-zoom-in 1600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+  /* World pan-zoom animations */
+  @keyframes world-zoom-in {
+    0% { transform: translate3d(0,0,0) scale(1); }
+    100% { transform: translate3d(-12%, -10%, 0) scale(1.45); }
+  }
+  @keyframes world-zoom-out {
+    0% { transform: translate3d(-12%, -10%, 0) scale(1.45); }
+    100% { transform: translate3d(0,0,0) scale(1); }
+  }
+  .world-motion { transform-origin: center; will-change: transform; }
+  .animate-world-zoom-in { animation: world-zoom-in 1600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+  .animate-world-zoom-out { animation: world-zoom-out 1600ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 }

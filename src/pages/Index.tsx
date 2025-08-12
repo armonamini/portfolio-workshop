@@ -37,23 +37,34 @@ const Index = () => {
       </Helmet>
 
       <main id="home" className="relative min-h-screen overflow-hidden">
-        {/* Extended backdrop revealed on zoom-out */}
-        <div className={`absolute inset-0 -z-20 pointer-events-none transition-opacity duration-700 ${zoomedOut ? "opacity-100" : "opacity-0"}`} aria-hidden="true">
-          <img
-            src={heroBg}
-            alt="Extended indigo sky with distant purple hills"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vh] object-cover opacity-50"
-            loading="eager"
-          />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(60% 50% at 70% 20%, hsl(var(--primary) / 0.18), transparent 60%)'
-          }} />
-          <div className="absolute inset-0 opacity-60">
-            <Waves />
+        {/* World backdrop with distant hills and embedded Home Page title */}
+        <div className="world-root absolute inset-0 -z-20" aria-hidden="true">
+          <div className={`world-motion ${anim}`}>
+            <div className="world-scene relative left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[200vh]">
+              <img
+                src={heroBg}
+                alt="Extended indigo sky with distant purple hills"
+                className="absolute inset-0 w-full h-full object-cover opacity-50"
+                loading="eager"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(60% 50% at 70% 20%, hsl(var(--primary) / 0.18), transparent 60%)',
+                }}
+              />
+              {/* Home scene title placed on the middle-left hill */}
+              <h2
+                className="absolute left-[22%] top-[42%] -rotate-6 text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] drop-shadow-[0_2px_8px_hsl(var(--title-glow)_/_0.35)] select-none"
+              >
+                Home Page
+              </h2>
+            </div>
           </div>
         </div>
 
-        <div className={`scene-root ${anim}`}>
+        <div className="scene-root">
         {/* Background image */}
         <div className="absolute inset-0 -z-10">
           <img
@@ -73,12 +84,16 @@ const Index = () => {
         {/* Ambient stars */}
         <StarsOverlay />
 
-        {/* Background title */}
-        <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
-          <h1 className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] opacity-75 mix-blend-overlay select-none animate-title-drift" style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--title-glow) / 0.25))' }}>
-            {pageHeading}
-          </h1>
-        </div>
+        {!zoomedOut && (
+          <div className="pointer-events-none absolute top-10 inset-x-0 z-0 text-center">
+            <h1
+              className="mx-auto text-6xl md:text-8xl font-extrabold tracking-tight text-[hsl(var(--title))] opacity-75 mix-blend-overlay select-none animate-title-drift"
+              style={{ filter: 'drop-shadow(0 2px 8px hsl(var(--title-glow) / 0.25))' }}
+            >
+              {"John's Portfolio"}
+            </h1>
+          </div>
+        )}
 
         {/* Centered content */}
         <section className="container mx-auto flex min-h-screen items-center justify-center px-4">
@@ -93,7 +108,7 @@ const Index = () => {
                   size="lg"
                   variant="hero"
                   onClick={() => {
-                    setAnim('animate-scene-zoom-out');
+                    setAnim('animate-world-zoom-in');
                     setZoomedOut(true);
                   }}
                   aria-label="Go to Home"
@@ -110,7 +125,7 @@ const Index = () => {
               size="sm"
               variant="secondary"
               onClick={() => {
-                setAnim('animate-scene-zoom-in');
+                setAnim('animate-world-zoom-out');
                 setZoomedOut(false);
               }}
               aria-label="Back to landing"
