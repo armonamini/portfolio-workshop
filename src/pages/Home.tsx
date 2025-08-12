@@ -1,22 +1,12 @@
 import { Helmet } from "react-helmet-async";
-import { Suspense, lazy, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { hasWebGL, prefersReducedMotion } from "@/utils/webgl";
 
-// Lazy load the background components
-const BlueMountains = lazy(() => import("@/features/blue-geo/BlueMountains").then(m => ({ default: m.BlueMountains })));
-const FallbackWaves = lazy(() => import("@/features/blue-geo/FallbackWaves").then(m => ({ default: m.FallbackWaves })));
+// Temporarily disabled Three.js components to fix white screen issue
+// const BlueMountains = lazy(() => import("@/features/blue-geo/BlueMountains").then(m => ({ default: m.BlueMountains })));
+// const FallbackWaves = lazy(() => import("@/features/blue-geo/FallbackWaves").then(m => ({ default: m.FallbackWaves })));
 
 const Home = () => {
-  const [useWebGL, setUseWebGL] = useState(false);
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/home` : "/home";
-
-  useEffect(() => {
-    // Check WebGL support and preferences
-    const shouldUseWebGL = hasWebGL() && !prefersReducedMotion;
-    console.log('Home: WebGL support check:', { hasWebGL: hasWebGL(), prefersReducedMotion, shouldUseWebGL });
-    setUseWebGL(shouldUseWebGL);
-  }, []);
 
   const personSchema = {
     "@context": "https://schema.org",
@@ -44,10 +34,8 @@ const Home = () => {
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
-      {/* Background */}
-      <Suspense fallback={<div className="fixed inset-0 -z-10 bg-gradient-to-b from-[#0A2F47] to-[#125A8A]" />}>
-        {useWebGL ? <BlueMountains /> : <FallbackWaves />}
-      </Suspense>
+      {/* Background - using CSS gradient for now */}
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-[#0A2F47] to-[#125A8A]" />
       
       {/* Fallback background in case everything fails */}
       <div className="fixed inset-0 -z-20 bg-gradient-to-b from-[#0A2F47] to-[#125A8A]" />
@@ -67,29 +55,7 @@ const Home = () => {
         {/* Hero section */}
         <section className="container mx-auto flex min-h-screen items-center justify-center px-4 pt-20">
           <div className="relative w-full max-w-4xl text-center">
-            <h2 
-              className="text-5xl md:text-7xl font-black tracking-wider text-white mb-8"
-              style={{ 
-                fontFamily: "'Orbitron', monospace",
-                filter: 'drop-shadow(0 4px 20px rgba(191, 230, 250, 0.5))',
-                textShadow: '0 0 30px rgba(191, 230, 250, 0.8), 0 0 60px rgba(191, 230, 250, 0.4)'
-              }}
-            >
-              Welcome Home
-            </h2>
-            
-            <p className="text-xl md:text-2xl text-[#BFE6FA] mb-12 max-w-2xl mx-auto leading-relaxed">
-              Explore the depths of creativity in this futuristic space where innovation meets design.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-[#125A8A] hover:bg-[#1973B0] text-white border-0">
-                View Projects
-              </Button>
-              <Button size="lg" variant="outline" className="border-[#BFE6FA] text-[#BFE6FA] hover:bg-[#BFE6FA]/10">
-                Contact Me
-              </Button>
-            </div>
+            {/* Content removed as requested */}
           </div>
         </section>
 

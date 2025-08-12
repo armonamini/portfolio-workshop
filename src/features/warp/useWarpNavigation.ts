@@ -6,23 +6,26 @@ import { prefersReducedMotion } from '@/utils/webgl';
 export const useWarpNavigation = () => {
   const { begin, complete } = useWarpController();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // If the route changes for any reason, hide overlay (belt-and-suspenders)
-  React.useEffect(() => { complete(); }, [location?.pathname, complete]);
 
   const start = async (target: string) => {
+    console.log('WarpNavigation: start() called with target:', target);
     // Skip warp if reduced motion is preferred
     if (prefersReducedMotion) {
+      console.log('WarpNavigation: Reduced motion - navigating directly');
       navigate(target);
       return;
     }
 
+    console.log('WarpNavigation: Starting warp animation');
     await begin({
       durationMs: 1000,
       cueMs: 700,
-      onCue: () => navigate(target),
+      onCue: () => {
+        console.log('WarpNavigation: Executing navigation to:', target);
+        navigate(target);
+      },
     });
+    console.log('WarpNavigation: Warp animation completed');
   };
 
   return { start };

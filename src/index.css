@@ -5,6 +5,50 @@
 /* Global nudge (prevents any accidental background) */
 #warp-overlay, #warp-overlay canvas { background: transparent !important; }
 
+/* Warp animations */
+@keyframes warp-pulse {
+  0% { 
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% { 
+    transform: scale(1.5);
+    opacity: 0.6;
+  }
+}
+
+@keyframes warp-stars {
+  0% { 
+    transform: translateX(0) rotate(0deg);
+  }
+  100% { 
+    transform: translateX(-200px) rotate(360deg);
+  }
+}
+
+@keyframes warp-text {
+  0% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  20% { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  80% { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */

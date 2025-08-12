@@ -4,28 +4,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { HyperspaceOverlay, useWarpNavigation, WarpProvider } from "@/features/warp";
+import { WarpProvider, HyperspaceOverlay } from "@/features/warp";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import "@/theme/ocean.css";
 
 const queryClient = new QueryClient();
-
-const AppContent = () => {
-  const warpNav = useWarpNavigation();
-
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<Index warpNav={warpNav} />} />
-        <Route path="/home" element={<Home />} />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </>
-  );
-};
 
 const App = () => (
   <HelmetProvider>
@@ -35,8 +20,13 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <WarpProvider>
-            <AppContent />
-            <HyperspaceOverlay />  {/* always mounted here */}
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/home" element={<Home />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <HyperspaceOverlay />
           </WarpProvider>
         </BrowserRouter>
       </TooltipProvider>
