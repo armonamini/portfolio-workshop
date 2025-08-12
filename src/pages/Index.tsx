@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
 import Waves from "@/components/ambient/Waves";
+import { useWarpNavigation } from "@/features/warp";
 
-interface IndexProps {
-  warpNav: {
-    start: (path: string) => void;
-  };
-}
-
-const Index = ({ warpNav }: IndexProps) => {
+const Index = () => {
+  const warpNav = useWarpNavigation();
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
 
   const personSchema = {
