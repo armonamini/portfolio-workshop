@@ -1,10 +1,25 @@
 import * as React from "react";
 import { StarWarsWarpOverlay } from "./StarWarsWarpOverlay";
+import { useWarpController } from "../warp/useWarpController";
 
 export function OverlayRoot() {
+  const { active } = useWarpController();
   return (
     <>
-      <StarWarsWarpOverlay />
+      <div
+        id="warp-overlay"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9999,
+          pointerEvents: 'none',
+          opacity: active ? 1 : 0,
+          transition: 'opacity 220ms ease-out',
+          background: 'transparent'
+        }}
+      >
+        <StarWarsWarpOverlay />
+      </div>
       
       {/* Credit to Codrops/Mamboleoo as required by license */}
       <div

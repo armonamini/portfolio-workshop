@@ -58,8 +58,11 @@ function StarWarsTunnelScene({ progress }: { progress: number }) {
       const t = Math.random();
       const point = curveRef.current.getPointAt(t);
       const tangent = curveRef.current.getTangentAt(t);
-      const normal = curveRef.current.getNormalVector(t);
-      const binormal = curveRef.current.getBinormal(t);
+      // Calculate normal and binormal manually since CatmullRomCurve3 doesn't have these methods
+      const tangent = curveRef.current.getTangentAt(t);
+      const up = new THREE.Vector3(0, 1, 0);
+      const normal = new THREE.Vector3().crossVectors(tangent, up).normalize();
+      const binormal = new THREE.Vector3().crossVectors(tangent, normal).normalize();
 
       // Position particles in a cylinder around the curve
       const radius = 2 + Math.random() * 3;
@@ -230,8 +233,26 @@ export function StarWarsWarpOverlay() {
   // Don't render anything if not active
   if (!active) return null;
 
+  // Dev override for testing
+  const force = typeof window !== 'undefined' && localStorage.getItem('forceWarp') === '1';
+  const reduced = prefersReducedMotion && !force;
+  
   // Use fallback for reduced motion preference or WebGL errors
-  if (prefersReducedMotion || webglError) {
+  if (reduced || webglError) {
+    console.log('StarWarsWarpOverlay: Using fallback (reduced motion or WebGL error)');
+    console.log('  - reduced motion:', reduced);
+    console.log('  - webgl error:', webglError);
+    
+    // Call complete immediately for fallback to avoid hanging
+    React.useEffect(() => {
+      if (active) {
+        const timer = setTimeout(() => {
+          console.log('StarWarsWarpOverlay: Fallback animation complete');
+          complete();
+        }, 200);
+        return () => clearTimeout(timer);
+      }
+    }, [active, complete]);
     return (
       <div
         id="warp-overlay"
@@ -301,6 +322,8 @@ export function StarWarsWarpOverlay() {
           background: "transparent",
         }}
       >
+        {/* Temporary backdrop for testing - remove in production */}
+        <color attach="background" args={['black']} />
         <StarWarsTunnelScene progress={progress} />
         
         {/* Post-processing effects temporarily disabled for stability */}

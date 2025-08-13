@@ -8,15 +8,17 @@ export const useWarpNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Complete warp on route change
-  React.useEffect(() => {
-    complete();
-  }, [location.pathname, complete]);
+  // Note: We don't auto-complete on route changes anymore
+  // The animation will complete naturally after 1.05s
 
   const start = async (target: string) => {
     console.log('WarpNavigation: start() called with target:', target);
+    // Dev override for testing
+    const force = typeof window !== 'undefined' && localStorage.getItem('forceWarp') === '1';
+    const reduced = prefersReducedMotion && !force;
+    
     // Skip warp if reduced motion is preferred
-    if (prefersReducedMotion) {
+    if (reduced) {
       console.log('WarpNavigation: Reduced motion - navigating directly');
       navigate(target);
       return;
