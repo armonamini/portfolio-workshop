@@ -75,33 +75,21 @@ const Home = () => {
         
         {/* Content overlay */}
         <div className="relative z-10 flex min-h-screen flex-col">
-          {/* Back button - top right */}
-          <div className="absolute top-6 right-6">
-            <Button asChild variant="outline" size="sm" className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm">
+          {/* Subtle title at top */}
+          <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+            <h1 className="text-2xl font-light tracking-wider text-white/90 select-none">
+              Home
+            </h1>
+          </div>
+          
+          {/* Back button - top left corner */}
+          <div className="absolute top-6 left-6">
+            <Button asChild variant="ghost" size="sm" className="text-white/60 hover:text-white/90 hover:bg-white/5 backdrop-blur-sm">
               <Link to="/" aria-label="Back to Landing">
-                ← Back to Landing
+                ←
               </Link>
             </Button>
           </div>
-          
-          {/* Main content - centered */}
-          <section className="flex flex-1 items-center justify-center px-4">
-            <div className="text-center">
-              <h1 
-                className="text-5xl md:text-7xl font-black tracking-wide text-white mb-4 grove-text-glow select-none"
-                style={{ 
-                  fontFamily: "'Orbitron', monospace",
-                  filter: 'drop-shadow(0 4px 20px hsl(var(--grove-text-shadow) / 0.8))'
-                }}
-              >
-                Welcome to the Grove
-              </h1>
-              
-              <p className="text-lg md:text-xl text-white/80 max-w-md mx-auto leading-relaxed">
-                Nature mode for the portfolio.
-              </p>
-            </div>
-          </section>
         </div>
       </main>
     </>
