@@ -26,7 +26,7 @@ export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     }, 220); // fade-out room
   }, [active]);
 
-  const begin = React.useCallback(({ durationMs = 1000, cueMs = 700, onCue }: BeginOpts) => {
+  const begin = React.useCallback(({ durationMs = 3000, cueMs = 2100, onCue }: BeginOpts) => {
     console.log('WarpController: begin() called, active:', active);
     if (active) return Promise.resolve(); // ignore double clicks
     console.log('WarpController: Setting active to true');

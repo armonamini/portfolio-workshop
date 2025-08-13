@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState, useMemo } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -34,9 +34,9 @@ const vertexShader = `
       vUv = uv;
       vPosition = position;
       
-      // Create displacement based on noise
-      vec2 noiseCoord = uv * 3.0 + u_time * u_speed * 0.1;
-      float elevation = fbm(noiseCoord) * 0.3;
+      // Create displacement based on noise (reduced intensity)
+      vec2 noiseCoord = uv * 2.0 + u_time * u_speed * 0.05;
+      float elevation = fbm(noiseCoord) * 0.1;
       vElevation = elevation;
       
       // Displace vertices
@@ -67,8 +67,8 @@ const fragmentShader = `
       vec2 grid = fract(vUv * gridSize);
       float line = step(0.98, grid.x) + step(0.98, grid.y); // Much thinner lines
       
-      // Animate the lines very subtly
-      float lineIntensity = line * (0.05 + 0.03 * sin(u_time * 1.0 + vUv.x * 5.0)); // Much lower intensity
+      // Animate the lines very subtly (reduced frequency)
+      float lineIntensity = line * (0.03 + 0.02 * sin(u_time * 0.5 + vUv.x * 3.0)); // Much lower intensity and frequency
       
       // Add glow effect
       vec3 glowColor = vec3(0.549, 0.776, 0.918); // #8BC6EA
@@ -104,8 +104,19 @@ const MountainsMesh = () => {
     });
   }, []);
 
+  const [isVisible, setIsVisible] = React.useState(true);
+
+  React.useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsVisible(document.visibilityState === 'visible');
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
   useFrame(({ clock }) => {
-    if (material) {
+    if (material && isVisible) {
       material.uniforms.u_time.value = clock.getElapsedTime();
       material.uniforms.u_speed.value = 1;
     }
