@@ -29,8 +29,21 @@ void main(){
   // slight radial darkening via vUv.x to fake depth toward tube center
   float radial = smoothstep(1.0, 0.3, abs(vUv.x-0.5)*2.0);
 
-  // emissive color ( > 1 enables selective bloom)
-  vec3 col = mix(vec3(0.04,0.0,0.08), vec3(1.8,0.9,2.2), energy) * radial;
+  // Enhanced emissive color with built-in bloom effect
+  vec3 darkColor = vec3(0.04, 0.0, 0.08);
+  vec3 brightColor = vec3(2.5, 1.2, 3.0); // More intense for bloom effect
+  vec3 col = mix(darkColor, brightColor, energy) * radial;
+
+  // Built-in vignette effect
+  float vignette = 1.0 - smoothstep(0.3, 0.9, length(vUv - 0.5) * 2.0);
+  col *= vignette;
+
+  // Add subtle chromatic aberration for cinematic feel
+  float aberration = 0.02;
+  float r = smoothstep(0.5 - aberration, 0.5 + aberration, vUv.x);
+  float b = smoothstep(0.5 - aberration, 0.5 + aberration, vUv.x + 0.01);
+  col.r *= r;
+  col.b *= b;
 
   gl_FragColor = vec4(col, radial);  // alpha helps overlay blend
 }
@@ -67,23 +80,21 @@ export function TubeScene({ progress, onComplete }: TubeSceneProps) {
     return geometry;
   }, []);
 
-  // Create a much longer, wider tunnel path for immersive travel
+  // Create a cinematic S-curve tunnel path
   const curve = useMemo(() => {
-    const points = [];
-    // Create a very long path with gentle curves
-    for (let i = 0; i <= 100; i++) {
-      const t = i / 100;
-      const x = Math.sin(t * Math.PI * 1.5) * 8; // Wider S-curve
-      const y = Math.sin(t * Math.PI * 3) * 3; // More vertical movement
-      const z = -200 + t * 400; // Much longer tunnel from -200 to +200
-      points.push(new THREE.Vector3(x, y, z));
-    }
+    const points = [
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0.8, 0.2, -4),
+      new THREE.Vector3(-0.6, 0.0, -8),
+      new THREE.Vector3(0.6, -0.2, -12),
+      new THREE.Vector3(0, 0, -16)
+    ];
     return new THREE.CatmullRomCurve3(points, false, 'catmullrom', 0.5);
   }, []);
 
-  // Create tube geometry - massive tunnel for full visibility
+  // Create tube geometry with proper sizing
   const tubeGeometry = useMemo(() => {
-    return new THREE.TubeGeometry(curve, 800, 50.0, 64, false);
+    return new THREE.TubeGeometry(curve, 320, 1.25, 64, false);
   }, [curve]);
 
   // Create shader material
@@ -100,30 +111,33 @@ export function TubeScene({ progress, onComplete }: TubeSceneProps) {
     });
   }, []);
 
-  // Camera travel animation
+  // Camera travel animation with proper tunnel perspective
   useFrame((state) => {
     if (!material) return;
 
     // Update shader time
     material.uniforms.u_time.value = state.clock.elapsedTime;
 
-    // Animate camera through tube
+    // Animate camera through tube with ease-in/out
     const t = progress;
     if (t > 0 && t <= 1) {
+      // Apply easing for more cinematic feel
+      const easedT = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      
       // Get position along the curve
-      const pos = curve.getPointAt(t);
-      const tangent = curve.getTangentAt(t).normalize();
+      const pos = curve.getPointAt(easedT);
+      const tangent = curve.getTangentAt(easedT).normalize();
       
       // Position camera inside the tube
       camera.position.copy(pos);
       
       // Look ahead along the curve for proper tunnel perspective
-      const lookAhead = curve.getPointAt(Math.min(t + 0.1, 1.0));
+      const lookAhead = pos.clone().add(tangent);
       camera.lookAt(lookAhead);
       
       // Stabilize camera roll
       const up = new THREE.Vector3(0, 1, 0);
-      camera.up.lerp(up, 0.1);
+      camera.up.lerp(up, 0.2);
     }
 
     // Check if animation is complete
@@ -132,10 +146,10 @@ export function TubeScene({ progress, onComplete }: TubeSceneProps) {
     }
   });
 
-  // Reset camera on mount - start deep inside the tunnel
+  // Reset camera on mount - start at tunnel entrance
   useEffect(() => {
-    camera.position.set(0, 0, -150); // Start inside the massive tunnel
-    camera.lookAt(0, 0, -140);
+    camera.position.set(0, 0, -2);
+    camera.lookAt(0, 0, -4);
   }, [camera]);
 
     return (
@@ -145,33 +159,13 @@ export function TubeScene({ progress, onComplete }: TubeSceneProps) {
         <primitive object={material} attach="material" />
       </mesh>
       
-      {/* Tunnel exit light */}
-      <mesh position={[0, 0, 200]}>
-        <sphereGeometry args={[50, 32, 32]} />
-        <meshBasicMaterial 
-          color={0xffffff} 
-          transparent={true}
-          opacity={0.3}
-        />
-      </mesh>
-      
-      {/* Additional exit glow */}
-      <mesh position={[0, 0, 200]}>
-        <sphereGeometry args={[80, 32, 32]} />
-        <meshBasicMaterial 
-          color={0xffffff} 
-          transparent={true}
-          opacity={0.1}
-        />
-      </mesh>
-      
-      {/* Star particles */}
+      {/* Star particles for space atmosphere */}
       <points geometry={starGeometry}>
         <pointsMaterial 
-          size={2}
+          size={1}
           vertexColors={true}
           transparent={true}
-          opacity={0.8}
+          opacity={0.6}
         />
       </points>
     </>

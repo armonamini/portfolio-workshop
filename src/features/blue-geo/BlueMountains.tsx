@@ -34,9 +34,9 @@ const vertexShader = `
       vUv = uv;
       vPosition = position;
       
-      // Create displacement based on noise (reduced intensity)
-      vec2 noiseCoord = uv * 2.0 + u_time * u_speed * 0.05;
-      float elevation = fbm(noiseCoord) * 0.1;
+      // Create displacement based on noise (further reduced intensity)
+      vec2 noiseCoord = uv * 1.5 + u_time * u_speed * 0.03;
+      float elevation = fbm(noiseCoord) * 0.04;
       vElevation = elevation;
       
       // Displace vertices
@@ -62,13 +62,13 @@ const fragmentShader = `
       // Add elevation-based color variation
       vec3 color = mix(oceanBlue, vec3(0.196, 0.455, 0.690), vElevation);
       
-      // Add very subtle emissive lines for wireframe effect (much more subtle)
-      float gridSize = 40.0; // Increased grid size for less density
+      // Add very subtle emissive lines for wireframe effect (minimal)
+      float gridSize = 50.0; // Even larger grid for less density
       vec2 grid = fract(vUv * gridSize);
-      float line = step(0.98, grid.x) + step(0.98, grid.y); // Much thinner lines
+      float line = step(0.99, grid.x) + step(0.99, grid.y); // Even thinner lines
       
-      // Animate the lines very subtly (reduced frequency)
-      float lineIntensity = line * (0.03 + 0.02 * sin(u_time * 0.5 + vUv.x * 3.0)); // Much lower intensity and frequency
+      // Animate the lines very subtly (minimal frequency)
+      float lineIntensity = line * (0.02 + 0.01 * sin(u_time * 0.3 + vUv.x * 2.0)); // Minimal intensity and frequency
       
       // Add glow effect
       vec3 glowColor = vec3(0.549, 0.776, 0.918); // #8BC6EA

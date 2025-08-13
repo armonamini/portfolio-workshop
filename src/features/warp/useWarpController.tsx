@@ -26,7 +26,7 @@ export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     }, 220); // fade-out room
   }, [active]);
 
-  const begin = React.useCallback(({ durationMs = 3000, cueMs = 2100, onCue }: BeginOpts) => {
+  const begin = React.useCallback(({ durationMs = 1050, cueMs = 700, onCue }: BeginOpts) => {
     console.log('WarpController: begin() called, active:', active);
     if (active) return Promise.resolve(); // ignore double clicks
     console.log('WarpController: Setting active to true');
@@ -39,7 +39,7 @@ export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     safetyRef.current = window.setTimeout(() => {
       console.log('WarpController: Safety timeout - calling complete()');
       complete();
-    }, durationMs + 50);
+    }, durationMs + 100); // Extra buffer for guaranteed teardown
     return new Promise<void>((resolve) => { 
       console.log('WarpController: Creating promise');
       resolverRef.current = resolve; 
