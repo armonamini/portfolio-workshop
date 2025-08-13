@@ -81,7 +81,7 @@ const Index = () => {
 
             <div className="mt-8 flex items-center justify-center">
               <Button asChild size="lg" variant="hero">
-                <a href="/" aria-label="Go to Home">Home</a>
+                <a href="/home" aria-label="Go to Home">Home</a>
               </Button>
             </div>
           </div>

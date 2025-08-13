@@ -1,0 +1,60 @@
+:root {
+  /* Grove palette - nature greens & earth tones */
+  --grove-950: 11 31 20;     /* #0b1f14 - night forest */
+  --grove-900: 15 42 26;     /* #0f2a1a */
+  --grove-800: 21 56 37;     /* #153825 */
+  --grove-700: 27 74 49;     /* #1b4a31 */
+  --grove-600: 46 125 50;    /* #2E7D32 - primary green */
+  --grove-500: 63 163 77;    /* #3FA34D */
+  --grove-400: 104 193 116;  /* #68C174 */
+  --grove-300: 156 217 166;  /* #9CD9A6 */
+  --grove-200: 207 235 213;  /* #CFEBD5 */
+  --grove-accent: 163 230 53; /* #A3E635 - fireflies */
+  
+  /* Grove semantic tokens */
+  --grove-sky-top: var(--grove-950);
+  --grove-sky-mid: var(--grove-700);
+  --grove-hill-primary: var(--grove-600);
+  --grove-hill-secondary: var(--grove-500);
+  --grove-firefly: var(--grove-accent);
+  --grove-text-light: 255 255 255;
+  --grove-text-shadow: var(--grove-950);
+}
+
+/* Grove specific utilities */
+@layer utilities {
+  .grove-gradient-sky {
+    background: linear-gradient(
+      180deg, 
+      hsl(var(--grove-sky-top)) 0%, 
+      hsl(var(--grove-sky-mid)) 60%, 
+      transparent 100%
+    );
+  }
+  
+  .grove-text-glow {
+    text-shadow: 
+      0 0 20px hsl(var(--grove-firefly) / 0.8),
+      0 0 40px hsl(var(--grove-firefly) / 0.4),
+      0 2px 8px hsl(var(--grove-text-shadow) / 0.8);
+  }
+  
+  @keyframes firefly-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  
+  @keyframes firefly-drift {
+    0% { transform: translate3d(0, 0, 0); }
+    25% { transform: translate3d(10px, -5px, 0); }
+    50% { transform: translate3d(-5px, -10px, 0); }
+    75% { transform: translate3d(-10px, 5px, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
+  
+  .animate-firefly {
+    animation: 
+      firefly-pulse 3s ease-in-out infinite,
+      firefly-drift 8s ease-in-out infinite;
+  }
+}
