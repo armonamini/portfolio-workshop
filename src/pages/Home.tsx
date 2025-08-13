@@ -1,9 +1,10 @@
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
+import { Suspense, lazy } from "react";
 
-// Temporarily disabled Three.js components to fix white screen issue
-// const BlueMountains = lazy(() => import("@/features/blue-geo/BlueMountains").then(m => ({ default: m.BlueMountains })));
-// const FallbackWaves = lazy(() => import("@/features/blue-geo/FallbackWaves").then(m => ({ default: m.FallbackWaves })));
+// Re-enable Three.js components with compatible versions
+const BlueMountains = lazy(() => import("@/features/blue-geo/BlueMountains").then(m => ({ default: m.BlueMountains })));
+const FallbackWaves = lazy(() => import("@/features/blue-geo/FallbackWaves").then(m => ({ default: m.FallbackWaves })));
 
 const Home = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/home` : "/home";
@@ -34,11 +35,12 @@ const Home = () => {
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
 
-      {/* Background - using CSS gradient for now */}
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-[#0A2F47] to-[#125A8A]" />
-      
-      {/* Fallback background in case everything fails */}
-      <div className="fixed inset-0 -z-20 bg-gradient-to-b from-[#0A2F47] to-[#125A8A]" />
+      {/* Background - Blue Mountains with fallback */}
+      <div className="fixed inset-0 -z-10">
+        <Suspense fallback={<FallbackWaves />}>
+          <BlueMountains />
+        </Suspense>
+      </div>
 
       {/* Main content */}
       <main className="relative min-h-screen">
@@ -55,7 +57,8 @@ const Home = () => {
         {/* Hero section */}
         <section className="container mx-auto flex min-h-screen items-center justify-center px-4 pt-20">
           <div className="relative w-full max-w-4xl text-center">
-            {/* Content removed as requested */}
+            <h2 className="text-4xl font-bold text-white mb-4">Welcome to Home Page</h2>
+            <p className="text-[#BFE6FA] text-lg">The cinematic spiral tunnel should have brought you here!</p>
           </div>
         </section>
 
