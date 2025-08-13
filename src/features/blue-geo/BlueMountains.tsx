@@ -34,9 +34,9 @@ const vertexShader = `
       vUv = uv;
       vPosition = position;
       
-      // Create displacement based on noise (further reduced intensity)
-      vec2 noiseCoord = uv * 1.5 + u_time * u_speed * 0.03;
-      float elevation = fbm(noiseCoord) * 0.04;
+      // Create displacement based on noise (reduced wobble: amplitude ×0.4, frequency ×0.6)
+      vec2 noiseCoord = uv * 0.9 + u_time * u_speed * 0.018; // frequency ×0.6 (0.03 * 0.6)
+      float elevation = fbm(noiseCoord) * 0.016; // amplitude ×0.4 (0.04 * 0.4)
       vElevation = elevation;
       
       // Displace vertices
@@ -67,16 +67,16 @@ const fragmentShader = `
       vec2 grid = fract(vUv * gridSize);
       float line = step(0.99, grid.x) + step(0.99, grid.y); // Even thinner lines
       
-      // Animate the lines very subtly (minimal frequency)
-      float lineIntensity = line * (0.02 + 0.01 * sin(u_time * 0.3 + vUv.x * 2.0)); // Minimal intensity and frequency
+      // Animate the lines very subtly (reduced frequency)
+      float lineIntensity = line * (0.02 + 0.01 * sin(u_time * 0.18 + vUv.x * 1.2)); // frequency ×0.6
       
       // Add glow effect
       vec3 glowColor = vec3(0.549, 0.776, 0.918); // #8BC6EA
       color = mix(color, glowColor, lineIntensity);
       
-      // Add atmospheric fog
+      // Add atmospheric fog (enhanced to reduce shimmer)
       float fog = smoothstep(0.0, 0.5, vUv.y);
-      color = mix(color, vec3(0.196, 0.455, 0.690), fog * 0.3);
+      color = mix(color, vec3(0.196, 0.455, 0.690), fog * 0.5); // Increased fog intensity
       
       // Add horizon glow
       float horizon = smoothstep(0.4, 0.6, vUv.y);

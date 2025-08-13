@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { WarpProvider } from "@/features/warp";
-import { TunnelOverlay } from "@/features/warp3d/TunnelOverlay";
+import { OverlayRoot } from "@/features/warp-sw/OverlayRoot";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -27,7 +27,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-            <TunnelOverlay />
+            <OverlayRoot />
           </WarpProvider>
         </BrowserRouter>
       </TooltipProvider>

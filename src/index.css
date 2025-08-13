@@ -229,4 +229,9 @@ All colors MUST be HSL.
     0%, 100% { opacity: 0.24; }
     50% { opacity: 0.36; }
   }
+
+  /* Global guard for warp overlay transparency */
+  #warp-overlay, #warp-overlay canvas { 
+    background: transparent !important; 
+  }
 }

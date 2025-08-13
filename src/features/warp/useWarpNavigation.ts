@@ -6,6 +6,12 @@ import { prefersReducedMotion } from '@/utils/webgl';
 export const useWarpNavigation = () => {
   const { begin, complete } = useWarpController();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Complete warp on route change
+  React.useEffect(() => {
+    complete();
+  }, [location.pathname, complete]);
 
   const start = async (target: string) => {
     console.log('WarpNavigation: start() called with target:', target);
@@ -18,8 +24,8 @@ export const useWarpNavigation = () => {
 
     console.log('WarpNavigation: Starting warp animation');
     await begin({
-      durationMs: 1000,
-      cueMs: 700,
+      durationMs: 1050,
+      cueMs: 720,
       onCue: () => {
         console.log('WarpNavigation: Executing navigation to:', target);
         navigate(target);
