@@ -13,18 +13,6 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' &&
     componentTagger(),
-    // Plugin to handle GLSL shader files
-    {
-      name: 'glsl-loader',
-      transform(code, id) {
-        if (id.endsWith('.vert') || id.endsWith('.frag')) {
-          return {
-            code: `export default ${JSON.stringify(code)};`,
-            map: null
-          };
-        }
-      }
-    }
   ].filter(Boolean),
   resolve: {
     alias: {
