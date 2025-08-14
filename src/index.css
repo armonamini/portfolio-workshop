@@ -239,4 +239,57 @@ All colors MUST be HSL.
       firefly-pulse 3s ease-in-out infinite,
       firefly-drift 8s ease-in-out infinite;
   }
+
+  /* Tree swaying animations */
+  @keyframes animate-sway-slow {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(1deg); }
+  }
+  
+  @keyframes animate-sway-medium {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-1.5deg); }
+  }
+  
+  .animate-sway-slow {
+    animation: animate-sway-slow 4s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+  
+  .animate-sway-medium {
+    animation: animate-sway-medium 3s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  /* Water animations */
+  @keyframes waterfall-flow {
+    0% { transform: translateY(-20px); opacity: 1; }
+    100% { transform: translateY(20px); opacity: 0.7; }
+  }
+  
+  @keyframes water-mist {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0.3; transform: scale(1.1); }
+  }
+  
+  @keyframes river-flow {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+  }
+  
+  @keyframes water-shimmer {
+    0% { opacity: 0.3; transform: scaleX(1); }
+    100% { opacity: 0.8; transform: scaleX(1.2); }
+  }
+  
+  @keyframes animate-float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-10px) translateX(5px); }
+    50% { transform: translateY(-5px) translateX(-3px); }
+    75% { transform: translateY(-15px) translateX(2px); }
+  }
+  
+  .animate-float {
+    animation: animate-float 6s ease-in-out infinite;
+  }
 }
