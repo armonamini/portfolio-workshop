@@ -59,7 +59,6 @@ function StarWarsTunnelScene({ progress }: { progress: number }) {
       const point = curveRef.current.getPointAt(t);
       const tangent = curveRef.current.getTangentAt(t);
       // Calculate normal and binormal manually since CatmullRomCurve3 doesn't have these methods
-      const tangent = curveRef.current.getTangentAt(t);
       const up = new THREE.Vector3(0, 1, 0);
       const normal = new THREE.Vector3().crossVectors(tangent, up).normalize();
       const binormal = new THREE.Vector3().crossVectors(tangent, normal).normalize();
