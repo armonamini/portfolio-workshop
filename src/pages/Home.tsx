@@ -40,8 +40,8 @@ const Home = () => {
       </Helmet>
 
       <main className="relative h-screen overflow-hidden">
-        {/* Sky - only 1/3 of screen with dark blue gradient */}
-        <div className="absolute inset-0 h-1/3 bg-gradient-to-b from-slate-900 via-blue-900 to-blue-800">
+        {/* Sky - only 1/3 of screen with consistent dark blue */}
+        <div className="absolute inset-0 h-1/3 bg-slate-900">
           {/* Fluffy clouds */}
           <div className="absolute top-8 left-20 w-16 h-8 rounded-full opacity-60" style={{ background: "radial-gradient(ellipse, white 30%, transparent 70%)" }} />
           <div className="absolute top-12 left-24 w-12 h-6 rounded-full opacity-40" style={{ background: "radial-gradient(ellipse, white 30%, transparent 70%)" }} />
@@ -92,7 +92,7 @@ const Home = () => {
           <svg className="w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMin slice">
             {/* Background layer trees - small and distant - properly distributed */}
             {Array.from({ length: 50 }, (_, i) => {
-              const x = (i / 50) * 1200 + (Math.random() - 0.5) * 60; // Evenly distributed across width
+              const x = (i * 24) + (Math.random() * 20 - 10); // Better distribution across full width
               const y = 200 + (Math.random() * 80);
               const height = 30 + (Math.random() * 25);
               const width = height * 0.6;
@@ -112,7 +112,7 @@ const Home = () => {
 
             {/* Middle layer trees - medium size - properly distributed */}
             {Array.from({ length: 35 }, (_, i) => {
-              const x = (i / 35) * 1200 + (Math.random() - 0.5) * 80;
+              const x = (i * 34) + (Math.random() * 30 - 15); // Better distribution
               const y = 280 + (Math.random() * 100);
               const height = 50 + (Math.random() * 35);
               const width = height * 0.7;
@@ -133,7 +133,7 @@ const Home = () => {
 
             {/* Foreground trees - large and detailed - properly distributed */}
             {Array.from({ length: 20 }, (_, i) => {
-              const x = (i / 20) * 1200 + (Math.random() - 0.5) * 100;
+              const x = (i * 60) + (Math.random() * 40 - 20); // Better distribution
               const y = 380 + (Math.random() * 120);
               const height = 70 + (Math.random() * 50);
               const width = height * 0.8;
