@@ -6,6 +6,35 @@ const Home = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/home` : "/home";
   const warpNav = useWarpNavigation();
 
+  // Tree component for controlled generation
+  const Tree = ({ x, y, s = 1, color = "#036827" }: { x: number; y: number; s?: number; color?: string }) => (
+    <g transform={`translate(${x},${y}) scale(${s})`}>
+      <polygon points="0,0 -14,40 14,40" fill={color} />
+      <polygon points="0,25 -11,50 11,50" fill={color} />
+      <rect x="-2" y="50" width="4" height="15" fill="#57381D" />
+    </g>
+  );
+
+  // Generate tree rows with controlled positioning
+  function makeRow({
+    fromX, toX, baseY, curveAmp = 20, count, jitter = 10, seed = 1, color,
+  }: {
+    fromX: number; toX: number; baseY: number; curveAmp?: number; count: number; jitter?: number; seed?: number; color: string;
+  }) {
+    const rand = (() => {
+      let t = seed >>> 0;
+      return () => (t = (t + 0x6D2B79F5) | 0, ((t ^ (t >>> 15)) & 0xffffffff) / 0xffffffff);
+    })();
+
+    return Array.from({ length: count }, (_, i) => {
+      const t = (i + 1) / (count + 1);
+      const x = fromX + t * (toX - fromX) + (rand() * 2 - 1) * jitter;
+      const y = baseY - Math.sin(t * Math.PI) * curveAmp + (rand() * 2 - 1) * 4;
+      const s = 0.8 + rand() * 0.5;
+      return <Tree key={`${seed}-${i}`} x={x} y={y} s={s} color={color} />;
+    });
+  }
+
   const pageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -50,161 +79,114 @@ const Home = () => {
           <div className="absolute top-16 left-1/2 w-18 h-9 rounded-full opacity-45" style={{ background: "radial-gradient(ellipse, white 30%, transparent 70%)" }} />
         </div>
 
-        {/* Mountains/Hills in background */}
-        <div className="absolute top-1/3 w-full h-2/3" style={{ background: "#0f172a" }}>
-          <svg className="w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMin slice">
-            {/* Far mountain range */}
-            <path d="M0,200 Q300,100 600,150 Q900,200 1200,120 L1200,600 L0,600 Z" fill="#164460" opacity="0.6" />
-            <path d="M0,250 Q200,150 400,180 Q600,220 800,160 Q1000,100 1200,140 L1200,600 L0,600 Z" fill="#0C5418" opacity="0.7" />
-            
-            {/* Middle hills with forest */}
-            <path d="M0,300 Q150,220 300,240 Q450,260 600,200 Q750,140 900,180 Q1050,220 1200,160 L1200,600 L0,600 Z" fill="#036827" opacity="0.85" />
-            
-            {/* Foreground forest base */}
-            <path d="M0,350 Q100,280 200,300 Q300,320 400,290 Q500,260 600,280 Q700,300 800,270 Q900,240 1000,260 Q1100,280 1200,250 L1200,600 L0,600 Z" fill="#81b14f" />
-          </svg>
-        </div>
+        {/* Nature Scene Background - Clipped SVG */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <svg
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 1200 800"
+            preserveAspectRatio="xMidYMax slice"
+            aria-hidden="true"
+          >
+            <defs>
+              <clipPath id="sceneClip">
+                <rect x="0" y="0" width="1200" height="800" />
+              </clipPath>
+            </defs>
 
-        {/* S-shaped river flowing through forest */}
-        <div className="absolute bottom-0 w-full h-40">
-          <svg className="w-full h-full" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax slice">
-            {/* S-shaped river path */}
-            <path 
-              d="M0,60 Q200,40 400,80 Q600,120 800,80 Q1000,40 1200,60 L1200,90 Q1000,70 800,110 Q600,150 400,110 Q200,70 0,90 Z" 
-              fill="#164460" 
-              opacity="0.8"
-            />
-            <path 
-              d="M0,65 Q200,45 400,85 Q600,125 800,85 Q1000,45 1200,65 L1200,95 Q1000,75 800,115 Q600,155 400,115 Q200,75 0,95 Z" 
-              fill="#4682B4" 
-              opacity="0.6"
-              style={{ animation: "river-flow 3s ease-in-out infinite" }}
-            />
-            {/* River reflections along the S curve */}
-            <ellipse cx="300" cy="75" rx="15" ry="4" fill="rgba(255, 255, 255, 0.3)" opacity="0.8" style={{ animation: "water-shimmer 2s ease-in-out infinite alternate" }} />
-            <ellipse cx="600" cy="105" rx="20" ry="5" fill="rgba(255, 255, 255, 0.3)" opacity="0.6" style={{ animation: "water-shimmer 2.5s ease-in-out infinite alternate" }} />
-            <ellipse cx="900" cy="75" rx="18" ry="4" fill="rgba(255, 255, 255, 0.3)" opacity="0.7" style={{ animation: "water-shimmer 1.8s ease-in-out infinite alternate" }} />
-          </svg>
-        </div>
+            <g clipPath="url(#sceneClip)">
+              {/* Mountains/Hills in background */}
+              <g transform="translate(0, 100)">
+                {/* Far mountain range */}
+                <path d="M0,200 Q300,100 600,150 Q900,200 1200,120 L1200,600 L0,600 Z" fill="#164460" opacity="0.6" />
+                <path d="M0,250 Q200,150 400,180 Q600,220 800,160 Q1000,100 1200,140 L1200,600 L0,600 Z" fill="#0C5418" opacity="0.7" />
+                
+                {/* Middle hills with forest */}
+                <path d="M0,300 Q150,220 300,240 Q450,260 600,200 Q750,140 900,180 Q1050,220 1200,160 L1200,600 L0,600 Z" fill="#036827" opacity="0.85" />
+                
+                {/* Foreground forest base */}
+                <path d="M0,350 Q100,280 200,300 Q300,320 400,290 Q500,260 600,280 Q700,300 800,270 Q900,240 1000,260 Q1100,280 1200,250 L1200,600 L0,600 Z" fill="#81b14f" />
+              </g>
 
-        {/* Dense forest with realistic trees */}
-        <div className="absolute top-1/3 w-full h-2/3">
-          <svg className="w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMin slice">
-            {/* Background layer trees - small and distant - properly distributed */}
-            {Array.from({ length: 50 }, (_, i) => {
-              const x = (i / 49) * 1200; // Evenly spread across the full 1200px width
-              const y = 200 + (Math.random() * 80);
-              const height = 30 + (Math.random() * 25);
-              const width = height * 0.6;
-              const animationClass = i % 3 === 0 ? "animate-sway-slow" : i % 3 === 1 ? "animate-sway-medium" : "";
-              
-              return (
-                <g key={`bg-tree-${i}`} transform={`translate(${x},${y})`} opacity="0.6" className={animationClass}>
-                  {/* Tree trunk */}
-                  <rect x={-width * 0.05} y={height - 10} width={width * 0.1} height="15" fill="#57381D" />
-                  {/* Tree canopy - layered for depth */}
-                  <ellipse cx="0" cy={height - 25} rx={width * 0.4} ry={height * 0.3} fill="#0C5418" />
-                  <ellipse cx="0" cy={height - 30} rx={width * 0.35} ry={height * 0.25} fill="#036827" />
-                  <ellipse cx="0" cy={height - 35} rx={width * 0.3} ry={height * 0.2} fill="#81b14f" />
-                </g>
-              );
-            })}
+              {/* S-shaped river flowing through forest */}
+              <g transform="translate(0, 500)">
+                {/* S-shaped river path */}
+                <path 
+                  d="M0,60 Q200,40 400,80 Q600,120 800,80 Q1000,40 1200,60 L1200,90 Q1000,70 800,110 Q600,150 400,110 Q200,70 0,90 Z" 
+                  fill="#164460" 
+                  opacity="0.8"
+                />
+                <path 
+                  d="M0,65 Q200,45 400,85 Q600,125 800,85 Q1000,45 1200,65 L1200,95 Q1000,75 800,115 Q600,155 400,115 Q200,75 0,95 Z" 
+                  fill="#4682B4" 
+                  opacity="0.6"
+                  style={{ animation: "river-flow 3s ease-in-out infinite" }}
+                />
+                {/* River reflections along the S curve */}
+                <ellipse cx="300" cy="75" rx="15" ry="4" fill="rgba(255, 255, 255, 0.3)" opacity="0.8" style={{ animation: "water-shimmer 2s ease-in-out infinite alternate" }} />
+                <ellipse cx="600" cy="105" rx="20" ry="5" fill="rgba(255, 255, 255, 0.3)" opacity="0.6" style={{ animation: "water-shimmer 2.5s ease-in-out infinite alternate" }} />
+                <ellipse cx="900" cy="75" rx="18" ry="4" fill="rgba(255, 255, 255, 0.3)" opacity="0.7" style={{ animation: "water-shimmer 1.8s ease-in-out infinite alternate" }} />
+              </g>
 
-            {/* Middle layer trees - medium size - properly distributed */}
-            {Array.from({ length: 35 }, (_, i) => {
-              const x = (i / 34) * 1200; // Evenly spread across the full width
-              const y = 280 + (Math.random() * 100);
-              const height = 50 + (Math.random() * 35);
-              const width = height * 0.7;
-              const animationClass = i % 2 === 0 ? "animate-sway-slow" : "animate-sway-medium";
-              
-              return (
-                <g key={`mid-tree-${i}`} transform={`translate(${x},${y})`} opacity="0.8" className={animationClass}>
-                  {/* Tree trunk */}
-                  <rect x={-width * 0.06} y={height - 15} width={width * 0.12} height="20" fill="#57381D" />
-                  {/* Tree canopy - multiple layers for realism */}
-                  <ellipse cx="0" cy={height - 35} rx={width * 0.45} ry={height * 0.35} fill="#0C5418" />
-                  <ellipse cx="0" cy={height - 40} rx={width * 0.4} ry={height * 0.3} fill="#036827" />
-                  <ellipse cx="0" cy={height - 45} rx={width * 0.35} ry={height * 0.25} fill="#81b14f" />
-                  <ellipse cx="0" cy={height - 50} rx={width * 0.25} ry={height * 0.18} fill="#036827" />
-                </g>
-              );
-            })}
-
-            {/* Foreground trees - large and detailed - properly distributed */}
-            {Array.from({ length: 20 }, (_, i) => {
-              const x = (i / 19) * 1200; // Evenly spread across the full width
-              const y = 380 + (Math.random() * 120);
-              const height = 70 + (Math.random() * 50);
-              const width = height * 0.8;
-              const animationClass = i % 2 === 0 ? "animate-sway-slow" : "animate-sway-medium";
-              
-              return (
-                <g key={`fg-tree-${i}`} transform={`translate(${x},${y})`} className={animationClass}>
-                  {/* Tree trunk with texture */}
-                  <rect x={-width * 0.08} y={height - 25} width={width * 0.16} height="30" fill="#57381D" />
-                  <rect x={-width * 0.07} y={height - 20} width={width * 0.02} height="25" fill="#8B4513" opacity="0.8" />
-                  <rect x={width * 0.05} y={height - 22} width={width * 0.02} height="27" fill="#8B4513" opacity="0.6" />
+              {/* Dense undergrowth layers */}
+              <g>
+                {/* Dense undergrowth layer 1 */}
+                {Array.from({ length: 120 }, (_, i) => {
+                  const x = (i / 120) * 1200 + (Math.random() - 0.5) * 40;
+                  const y = 520 + (Math.random() * 120);
+                  const size = 8 + (Math.random() * 18);
                   
-                  {/* Complex tree canopy */}
-                  <ellipse cx="0" cy={height - 45} rx={width * 0.5} ry={height * 0.4} fill="#0C5418" />
-                  <ellipse cx={-width * 0.2} cy={height - 50} rx={width * 0.3} ry={height * 0.25} fill="#036827" />
-                  <ellipse cx={width * 0.15} cy={height - 48} rx={width * 0.35} ry={height * 0.28} fill="#036827" />
-                  <ellipse cx="0" cy={height - 55} rx={width * 0.4} ry={height * 0.3} fill="#81b14f" />
-                  <ellipse cx={-width * 0.1} cy={height - 60} rx={width * 0.25} ry={height * 0.2} fill="#81b14f" />
-                  <ellipse cx={width * 0.1} cy={height - 58} rx={width * 0.28} ry={height * 0.22} fill="#036827" />
-                </g>
-              );
-            })}
+                  return (
+                    <g key={`undergrowth1-${i}`} transform={`translate(${x},${y})`} opacity="0.8">
+                      <ellipse cx="0" cy="0" rx={size * 0.9} ry={size * 0.5} fill="#81b14f" />
+                      <ellipse cx={size * 0.3} cy={-size * 0.3} rx={size * 0.6} ry={size * 0.4} fill="#036827" />
+                      <ellipse cx={-size * 0.2} cy={-size * 0.2} rx={size * 0.7} ry={size * 0.45} fill="#0C5418" />
+                    </g>
+                  );
+                })}
 
-            {/* Dense undergrowth layer 1 - covering most of the forest floor */}
-            {Array.from({ length: 120 }, (_, i) => {
-              const x = (i / 120) * 1200 + (Math.random() - 0.5) * 40;
-              const y = 420 + (Math.random() * 120);
-              const size = 8 + (Math.random() * 18);
-              
-              return (
-                <g key={`undergrowth1-${i}`} transform={`translate(${x},${y})`} opacity="0.8">
-                  <ellipse cx="0" cy="0" rx={size * 0.9} ry={size * 0.5} fill="#81b14f" />
-                  <ellipse cx={size * 0.3} cy={-size * 0.3} rx={size * 0.6} ry={size * 0.4} fill="#036827" />
-                  <ellipse cx={-size * 0.2} cy={-size * 0.2} rx={size * 0.7} ry={size * 0.45} fill="#0C5418" />
-                </g>
-              );
-            })}
+                {/* Dense undergrowth layer 2 */}
+                {Array.from({ length: 100 }, (_, i) => {
+                  const x = Math.random() * 1200;
+                  const y = 550 + (Math.random() * 100);
+                  const size = 6 + (Math.random() * 12);
+                  
+                  return (
+                    <g key={`undergrowth2-${i}`} transform={`translate(${x},${y})`} opacity="0.7">
+                      <ellipse cx="0" cy="0" rx={size * 0.8} ry={size * 0.4} fill="#81b14f" />
+                      <ellipse cx={size * 0.4} cy={-size * 0.1} rx={size * 0.5} ry={size * 0.3} fill="#036827" />
+                    </g>
+                  );
+                })}
 
-            {/* Dense undergrowth layer 2 - additional coverage */}
-            {Array.from({ length: 100 }, (_, i) => {
-              const x = Math.random() * 1200;
-              const y = 450 + (Math.random() * 100);
-              const size = 6 + (Math.random() * 12);
-              
-              return (
-                <g key={`undergrowth2-${i}`} transform={`translate(${x},${y})`} opacity="0.7">
-                  <ellipse cx="0" cy="0" rx={size * 0.8} ry={size * 0.4} fill="#81b14f" />
-                  <ellipse cx={size * 0.4} cy={-size * 0.1} rx={size * 0.5} ry={size * 0.3} fill="#036827" />
-                </g>
-              );
-            })}
+                {/* Ground ferns and detailed vegetation */}
+                {Array.from({ length: 80 }, (_, i) => {
+                  const x = Math.random() * 1200;
+                  const y = 580 + (Math.random() * 80);
+                  const width = 12 + (Math.random() * 20);
+                  const height = 8 + (Math.random() * 15);
+                  
+                  return (
+                    <g key={`fern-${i}`} transform={`translate(${x},${y})`} opacity="0.9">
+                      {/* Fern fronds */}
+                      <ellipse cx="0" cy="0" rx={width * 0.4} ry={height * 0.6} fill="#81b14f" />
+                      <ellipse cx={width * 0.2} cy={-height * 0.3} rx={width * 0.3} ry={height * 0.4} fill="#036827" />
+                      <ellipse cx={-width * 0.15} cy={-height * 0.2} rx={width * 0.35} ry={height * 0.5} fill="#0C5418" />
+                      {/* Detailed fern leaves */}
+                      <ellipse cx={width * 0.1} cy={-height * 0.4} rx={width * 0.15} ry={height * 0.25} fill="#81b14f" />
+                      <ellipse cx={-width * 0.1} cy={-height * 0.35} rx={width * 0.2} ry={height * 0.3} fill="#036827" />
+                    </g>
+                  );
+                })}
+              </g>
 
-            {/* Ground ferns and detailed vegetation */}
-            {Array.from({ length: 80 }, (_, i) => {
-              const x = Math.random() * 1200;
-              const y = 480 + (Math.random() * 80);
-              const width = 12 + (Math.random() * 20);
-              const height = 8 + (Math.random() * 15);
-              
-              return (
-                <g key={`fern-${i}`} transform={`translate(${x},${y})`} opacity="0.9">
-                  {/* Fern fronds */}
-                  <ellipse cx="0" cy="0" rx={width * 0.4} ry={height * 0.6} fill="#81b14f" />
-                  <ellipse cx={width * 0.2} cy={-height * 0.3} rx={width * 0.3} ry={height * 0.4} fill="#036827" />
-                  <ellipse cx={-width * 0.15} cy={-height * 0.2} rx={width * 0.35} ry={height * 0.5} fill="#0C5418" />
-                  {/* Detailed fern leaves */}
-                  <ellipse cx={width * 0.1} cy={-height * 0.4} rx={width * 0.15} ry={height * 0.25} fill="#81b14f" />
-                  <ellipse cx={-width * 0.1} cy={-height * 0.35} rx={width * 0.2} ry={height * 0.3} fill="#036827" />
-                </g>
-              );
-            })}
+              {/* Tree rows aligned to hills */}
+              <g>
+                {makeRow({ fromX: 50, toX: 1150, baseY: 520, curveAmp: 18, count: 10, seed: 11, color: "#0C5418" })}
+                {makeRow({ fromX: 80, toX: 1120, baseY: 560, curveAmp: 14, count: 9, seed: 22, color: "#036827" })}
+                {makeRow({ fromX: 100, toX: 1100, baseY: 600, curveAmp: 10, count: 8, seed: 33, color: "#0C5418" })}
+                {makeRow({ fromX: 120, toX: 1080, baseY: 640, curveAmp: 8, count: 7, seed: 44, color: "#036827" })}
+              </g>
+            </g>
           </svg>
         </div>
 
