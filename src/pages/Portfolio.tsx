@@ -22,7 +22,13 @@ const Portfolio = () => {
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (homeSectionRef.current) {
-      homeSectionRef.current.scrollIntoView({ behavior: "smooth" });
+      // Scroll to homepage section with offset to hide more clouds
+      const elementTop = homeSectionRef.current.offsetTop;
+      const offset = 200; // Scroll past 200px of the section to hide more clouds
+      window.scrollTo({
+        top: elementTop + offset,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -115,8 +121,9 @@ const Portfolio = () => {
         {/* Home Section - with cloud transition at top */}
         <section 
           ref={homeSectionRef}
-          className="relative min-h-screen overflow-visible"
+          className="relative overflow-visible"
           style={{
+            minHeight: '150vh',
             background: 'linear-gradient(to bottom, hsl(210, 70%, 55%) 0%, hsl(200, 75%, 70%) 40%, hsl(195, 80%, 80%) 100%)'
           }}
         >
