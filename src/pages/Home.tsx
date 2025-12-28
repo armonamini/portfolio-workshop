@@ -2,10 +2,10 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy } from "react";
+import { FallbackWaves } from "@/features/blue-geo/FallbackWaves";
 
 // Re-enable Three.js components with compatible versions
 const BlueMountains = lazy(() => import("@/features/blue-geo/BlueMountains").then(m => ({ default: m.BlueMountains })));
-const FallbackWaves = lazy(() => import("@/features/blue-geo/FallbackWaves").then(m => ({ default: m.FallbackWaves })));
 
 const Home = () => {
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/home` : "/home";

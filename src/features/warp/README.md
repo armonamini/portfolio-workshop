@@ -9,7 +9,6 @@ A cinematic portal tunnel overlay that plays when navigating to the Home page.
 - `useWarpController`: Hook for managing warp state
 - `RingTunnel`: WebGL ring tunnel effect
 - `PortalStage`: Portal stage component for reduced motion fallback
-- `FallbackCanvas`: 2D canvas fallback for non-WebGL devices
 - `OverlayRoot`: Root container for overlay components
 
 ## Usage
