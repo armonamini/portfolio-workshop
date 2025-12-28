@@ -104,7 +104,7 @@ const Portfolio = () => {
         </main>
 
         {/* Cloud overlay - positioned at the junction between sections */}
-        <div className="relative z-30 pointer-events-none" style={{ marginTop: '-200px', marginBottom: '-200px' }}>
+        <div className="relative z-30 pointer-events-none" style={{ marginTop: '-80px', marginBottom: '-320px' }}>
           <CloudsTransition />
         </div>
 
