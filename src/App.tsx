@@ -10,7 +10,6 @@ import { OverlayRoot } from "@/features/warp/OverlayRoot";
 import Index from "./pages/Index";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import "@/theme/ocean.css";
 
 const queryClient = new QueryClient();
 

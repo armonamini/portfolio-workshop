@@ -7,6 +7,7 @@ type BeginOpts = {
   centerX?: number;
   centerY?: number;
 };
+
 type Ctx = {
   active: boolean;
   centerX: number;
@@ -15,9 +16,17 @@ type Ctx = {
   complete: () => void;
 };
 
-const Ctx = React.createContext<Ctx | null>(null);
+const WarpContext = React.createContext<Ctx | null>(null);
 
-export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const useWarpController = () => {
+  const context = React.useContext(WarpContext);
+  if (!context) {
+    throw new Error("useWarpController must be used within a WarpProvider");
+  }
+  return context;
+};
+
+export const WarpProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [active, setActive] = React.useState(false);
   const [centerX, setCenterX] = React.useState(0);
   const [centerY, setCenterY] = React.useState(0);
@@ -26,44 +35,51 @@ export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const complete = React.useCallback(() => {
     console.log('WarpController: complete() called, active:', active);
-    if (!active) return;
-    console.log('WarpController: Setting active to false');
-    setActive(false);
-    window.setTimeout(() => { 
+    if (active) {
+      console.log('WarpController: Setting active to false');
+      setActive(false);
+    }
+    if (resolverRef.current) {
       console.log('WarpController: Resolving promise');
-      resolverRef.current?.(); 
-      resolverRef.current = null; 
-    }, 220); // fade-out room
+      resolverRef.current();
+      resolverRef.current = null;
+    }
+    if (safetyRef.current) {
+      clearTimeout(safetyRef.current);
+      safetyRef.current = null;
+    }
   }, [active]);
 
-  const begin = React.useCallback(({ durationMs = 1050, cueMs = 700, onCue, centerX: cx, centerY: cy }: BeginOpts) => {
+  const begin = React.useCallback(async ({ durationMs = 1050, cueMs = 700, onCue, centerX: cx, centerY: cy }: BeginOpts) => {
     console.log('WarpController: begin() called, active:', active);
-    if (active) return Promise.resolve(); // ignore double clicks
+    if (active) return Promise.resolve();
+
     console.log('WarpController: Setting active to true');
     setActive(true);
     if (cx !== undefined) setCenterX(cx);
     if (cy !== undefined) setCenterY(cy);
+
+    // Create a promise that resolves when the animation completes
+    const promise = new Promise<void>((resolve) => {
+      console.log('WarpController: Creating promise');
+      resolverRef.current = resolve;
+    });
+
+    // Set up the cue (navigation) timing
     window.setTimeout(() => {
       console.log('WarpController: Executing onCue (navigation)');
-      onCue?.();
+      if (onCue) onCue();
     }, cueMs);
-    if (safetyRef.current) window.clearTimeout(safetyRef.current);
+
+    // Set up safety timeout to ensure completion
     safetyRef.current = window.setTimeout(() => {
       console.log('WarpController: Safety timeout - calling complete()');
       complete();
-    }, durationMs + 100); // Extra buffer for guaranteed teardown
-    return new Promise<void>((resolve) => { 
-      console.log('WarpController: Creating promise');
-      resolverRef.current = resolve; 
-    });
+    }, durationMs + 100);
+
+    return promise;
   }, [active, complete]);
 
   const value = React.useMemo(() => ({ active, centerX, centerY, begin, complete }), [active, centerX, centerY, begin, complete]);
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
-};
-
-export const useWarpController = () => {
-  const v = React.useContext(Ctx);
-  if (!v) throw new Error("useWarpController must be used inside <WarpProvider>");
-  return v;
+  return <WarpContext.Provider value={value}>{children}</WarpContext.Provider>;
 };

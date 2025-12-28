@@ -61,16 +61,6 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				},
-				ocean: {
-					900: 'var(--ocean-900)',
-					800: 'var(--ocean-800)',
-					700: 'var(--ocean-700)',
-					600: 'var(--ocean-600)',
-					500: 'var(--ocean-500)',
-					300: 'var(--ocean-300)',
-					200: 'var(--ocean-200)',
-					accent: 'var(--ocean-accent)'
 				}
 			},
 			borderRadius: {
@@ -124,6 +114,18 @@ export default {
 					'0%': { transform: 'translate(0,0)', opacity: '0' },
 					'10%': { opacity: '1' },
 					'100%': { transform: 'translate(var(--dx), var(--dy))', opacity: '0.1' }
+				},
+				'firefly': {
+					'0%,100%': { transform: 'translateY(0)', opacity: '0.4' },
+					'50%': { transform: 'translateY(-8px)', opacity: '0.9' }
+				},
+				'sway-slow': {
+					'0%,100%': { transform: 'rotate(-1deg)' },
+					'50%': { transform: 'rotate(1deg)' }
+				},
+				'sway-medium': {
+					'0%,100%': { transform: 'rotate(-1.5deg)' },
+					'50%': { transform: 'rotate(1.5deg)' }
 				}
 			},
 			animation: {
@@ -139,7 +141,10 @@ export default {
 				enter: 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
 				exit: 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
 				'star-drift': 'star-drift 6s ease-in-out infinite',
-				shoot: 'shoot 0.9s cubic-bezier(0.22,1,0.36,1) forwards'
+				shoot: 'shoot 0.9s cubic-bezier(0.22,1,0.36,1) forwards',
+				'firefly': 'firefly 4s ease-in-out infinite',
+				'sway-slow': 'sway-slow 8s ease-in-out infinite',
+				'sway-medium': 'sway-medium 6s ease-in-out infinite'
 			}
 		}
 	},

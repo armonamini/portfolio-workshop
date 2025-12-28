@@ -6,6 +6,10 @@ import { prefersReducedMotion } from '@/utils/webgl';
 export const useWarpNavigation = () => {
   const { begin, complete } = useWarpController();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Note: We don't auto-complete on route changes anymore
+  // The animation will complete naturally after 1.05s
 
   const start = async (target: string, buttonElement?: HTMLElement) => {
     console.log('WarpNavigation: start() called with target:', target);
@@ -21,8 +25,12 @@ export const useWarpNavigation = () => {
       console.log('WarpNavigation: Button center calculated:', centerX, centerY);
     }
     
+    // Dev override for testing
+    const force = typeof window !== 'undefined' && localStorage.getItem('forceWarp') === '1';
+    const reduced = prefersReducedMotion && !force;
+    
     // Skip warp if reduced motion is preferred
-    if (prefersReducedMotion) {
+    if (reduced) {
       console.log('WarpNavigation: Reduced motion - navigating directly');
       navigate(target);
       return;

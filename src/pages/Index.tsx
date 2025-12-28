@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 import StarsOverlay from "@/components/ambient/StarsOverlay";
 import Waves from "@/components/ambient/Waves";
-import { useWarpNavigation } from "@/features/warp";
+import { useWarpNavigation } from "@/features/warp/useWarpNavigation";
 
 const Index = () => {
-  const warpNav = useWarpNavigation();
   const canonical = typeof window !== "undefined" ? `${window.location.origin}/` : "/";
+  const warpNav = useWarpNavigation();
 
   const personSchema = {
     "@context": "https://schema.org",

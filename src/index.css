@@ -2,53 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global nudge (prevents any accidental background) */
-#warp-overlay, #warp-overlay canvas { background: transparent !important; }
-
-/* Warp animations */
-@keyframes warp-pulse {
-  0% { 
-    transform: scale(0.8);
-    opacity: 0.3;
-  }
-  50% { 
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-  100% { 
-    transform: scale(1.5);
-    opacity: 0.6;
-  }
-}
-
-@keyframes warp-stars {
-  0% { 
-    transform: translateX(0) rotate(0deg);
-  }
-  100% { 
-    transform: translateX(-200px) rotate(360deg);
-  }
-}
-
-@keyframes warp-text {
-  0% { 
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  20% { 
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-  80% { 
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% { 
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.2);
-  }
-}
-
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -114,6 +67,27 @@ All colors MUST be HSL.
     --shadow-elevated: 0 20px 40px -15px hsl(var(--foreground) / 0.2);
     --shadow-glow: 0 10px 30px -12px hsl(var(--accent) / 0.55);
     --shadow-glow-strong: 0 20px 50px -12px hsl(var(--accent) / 0.65);
+
+    /* Grove palette - nature greens & earth tones */
+    --grove-950: 11 31 20;     /* #0b1f14 - night forest */
+    --grove-900: 15 42 26;     /* #0f2a1a */
+    --grove-800: 21 56 37;     /* #153825 */
+    --grove-700: 27 74 49;     /* #1b4a31 */
+    --grove-600: 46 125 50;    /* #2E7D32 - primary green */
+    --grove-500: 63 163 77;    /* #3FA34D */
+    --grove-400: 104 193 116;  /* #68C174 */
+    --grove-300: 156 217 166;  /* #9CD9A6 */
+    --grove-200: 207 235 213;  /* #CFEBD5 */
+    --grove-accent: 163 230 53; /* #A3E635 - fireflies */
+    
+    /* Grove semantic tokens */
+    --grove-sky-top: var(--grove-950);
+    --grove-sky-mid: var(--grove-700);
+    --grove-hill-primary: var(--grove-600);
+    --grove-hill-secondary: var(--grove-500);
+    --grove-firefly: var(--grove-accent);
+    --grove-text-light: 255 255 255;
+    --grove-text-shadow: var(--grove-950);
   }
 
   .dark {
@@ -266,5 +240,94 @@ All colors MUST be HSL.
   @keyframes glow-breathe {
     0%, 100% { opacity: 0.24; }
     50% { opacity: 0.36; }
+  }
+
+  /* Grove-specific utilities */
+  .grove-gradient-sky {
+    background: linear-gradient(
+      180deg, 
+      hsl(var(--grove-sky-top)) 0%, 
+      hsl(var(--grove-sky-mid)) 60%, 
+      transparent 100%
+    );
+  }
+  
+  .grove-text-glow {
+    text-shadow: 
+      0 0 20px hsl(var(--grove-firefly) / 0.8),
+      0 0 40px hsl(var(--grove-firefly) / 0.4),
+      0 2px 8px hsl(var(--grove-text-shadow) / 0.8);
+  }
+  
+  @keyframes firefly-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  
+  @keyframes firefly-drift {
+    0% { transform: translate3d(0, 0, 0); }
+    25% { transform: translate3d(10px, -5px, 0); }
+    50% { transform: translate3d(-5px, -10px, 0); }
+    75% { transform: translate3d(-10px, 5px, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
+  
+  .animate-firefly {
+    animation: 
+      firefly-pulse 3s ease-in-out infinite,
+      firefly-drift 8s ease-in-out infinite;
+  }
+
+  /* Tree swaying animations */
+  @keyframes animate-sway-slow {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(1deg); }
+  }
+  
+  @keyframes animate-sway-medium {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-1.5deg); }
+  }
+  
+  .animate-sway-slow {
+    animation: animate-sway-slow 4s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+  
+  .animate-sway-medium {
+    animation: animate-sway-medium 3s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  /* Water animations */
+  @keyframes waterfall-flow {
+    0% { transform: translateY(-20px); opacity: 1; }
+    100% { transform: translateY(20px); opacity: 0.7; }
+  }
+  
+  @keyframes water-mist {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0.3; transform: scale(1.1); }
+  }
+  
+  @keyframes river-flow {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+  }
+  
+  @keyframes water-shimmer {
+    0% { opacity: 0.3; transform: scaleX(1); }
+    100% { opacity: 0.8; transform: scaleX(1.2); }
+  }
+  
+  @keyframes animate-float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-10px) translateX(5px); }
+    50% { transform: translateY(-5px) translateX(-3px); }
+    75% { transform: translateY(-15px) translateX(2px); }
+  }
+  
+  .animate-float {
+    animation: animate-float 6s ease-in-out infinite;
   }
 }
