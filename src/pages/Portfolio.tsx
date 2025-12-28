@@ -103,8 +103,8 @@ const Portfolio = () => {
           </section>
         </main>
 
-        {/* Cloud overlay - positioned 30% on landing, 70% on homepage */}
-        <div className="relative z-30 pointer-events-none" style={{ marginTop: '-120px', marginBottom: '-280px' }}>
+        {/* Cloud overlay - barely touches landing, mostly covers homepage transition */}
+        <div className="relative z-30 pointer-events-none" style={{ marginTop: '-40px', marginBottom: '-360px' }}>
           <CloudsTransition />
         </div>
 
