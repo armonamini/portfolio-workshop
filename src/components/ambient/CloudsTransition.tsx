@@ -127,13 +127,45 @@ const CloudsTransition = () => {
           <ellipse cx="1040" cy="242" rx="170" ry="55" fill="hsl(208, 56%, 76%)" />
         </g>
 
-        {/* Bright white cloud wisps at bottom */}
-        <g filter="url(#cloudSharp)" opacity="0.85">
-          <ellipse cx="150" cy="270" rx="130" ry="42" fill="hsl(200, 70%, 88%)" />
-          <ellipse cx="400" cy="280" rx="160" ry="48" fill="hsl(198, 75%, 92%)" />
-          <ellipse cx="650" cy="275" rx="180" ry="52" fill="hsl(202, 72%, 86%)" />
-          <ellipse cx="900" cy="285" rx="150" ry="46" fill="hsl(196, 78%, 90%)" />
-          <ellipse cx="1150" cy="278" rx="140" ry="44" fill="hsl(200, 74%, 88%)" />
+        {/* Bright white puffy cloud bottoms - rounded shapes */}
+        <g filter="url(#cloudSharp)" opacity="0.9">
+          {/* Left cluster */}
+          <ellipse cx="80" cy="280" rx="90" ry="45" fill="hsl(200, 70%, 90%)" />
+          <ellipse cx="150" cy="295" rx="70" ry="38" fill="hsl(198, 75%, 92%)" />
+          <ellipse cx="40" cy="290" rx="60" ry="35" fill="hsl(202, 72%, 88%)" />
+          
+          {/* Left-center cluster */}
+          <ellipse cx="280" cy="275" rx="100" ry="50" fill="hsl(200, 72%, 88%)" />
+          <ellipse cx="350" cy="290" rx="85" ry="45" fill="hsl(196, 78%, 91%)" />
+          <ellipse cx="220" cy="285" rx="70" ry="40" fill="hsl(202, 74%, 89%)" />
+          <ellipse cx="400" cy="300" rx="60" ry="35" fill="hsl(198, 76%, 93%)" />
+          
+          {/* Center cluster */}
+          <ellipse cx="520" cy="270" rx="110" ry="55" fill="hsl(200, 70%, 87%)" />
+          <ellipse cx="600" cy="288" rx="95" ry="48" fill="hsl(198, 75%, 90%)" />
+          <ellipse cx="680" cy="295" rx="80" ry="42" fill="hsl(202, 72%, 92%)" />
+          <ellipse cx="480" cy="290" rx="65" ry="38" fill="hsl(196, 78%, 89%)" />
+          
+          {/* Right-center cluster */}
+          <ellipse cx="800" cy="275" rx="105" ry="52" fill="hsl(200, 74%, 88%)" />
+          <ellipse cx="880" cy="292" rx="88" ry="46" fill="hsl(198, 76%, 91%)" />
+          <ellipse cx="740" cy="288" rx="72" ry="40" fill="hsl(204, 70%, 89%)" />
+          <ellipse cx="950" cy="298" rx="65" ry="36" fill="hsl(196, 80%, 93%)" />
+          
+          {/* Right cluster */}
+          <ellipse cx="1050" cy="278" rx="95" ry="48" fill="hsl(200, 72%, 89%)" />
+          <ellipse cx="1130" cy="290" rx="80" ry="44" fill="hsl(198, 74%, 91%)" />
+          <ellipse cx="1000" cy="295" rx="68" ry="38" fill="hsl(202, 76%, 87%)" />
+          <ellipse cx="1180" cy="300" rx="55" ry="32" fill="hsl(196, 78%, 92%)" />
+        </g>
+
+        {/* Extra puffy wisps at very bottom for soft fade */}
+        <g filter="url(#cloudSoft)" opacity="0.6">
+          <ellipse cx="120" cy="310" rx="100" ry="35" fill="hsl(200, 65%, 92%)" />
+          <ellipse cx="350" cy="315" rx="120" ry="40" fill="hsl(198, 70%, 94%)" />
+          <ellipse cx="600" cy="318" rx="140" ry="42" fill="hsl(202, 68%, 93%)" />
+          <ellipse cx="850" cy="312" rx="130" ry="38" fill="hsl(196, 72%, 94%)" />
+          <ellipse cx="1100" cy="316" rx="110" ry="36" fill="hsl(200, 66%, 92%)" />
         </g>
 
         {/* Animated wisps for subtle movement */}
