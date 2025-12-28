@@ -7,8 +7,20 @@ export const useWarpNavigation = () => {
   const { begin, complete } = useWarpController();
   const navigate = useNavigate();
 
-  const start = async (target: string) => {
+  const start = async (target: string, buttonElement?: HTMLElement) => {
     console.log('WarpNavigation: start() called with target:', target);
+    
+    // Calculate center coordinates from button if provided
+    let centerX = window.innerWidth / 2;
+    let centerY = window.innerHeight / 2;
+    
+    if (buttonElement) {
+      const rect = buttonElement.getBoundingClientRect();
+      centerX = rect.left + rect.width / 2;
+      centerY = rect.top + rect.height / 2;
+      console.log('WarpNavigation: Button center calculated:', centerX, centerY);
+    }
+    
     // Skip warp if reduced motion is preferred
     if (prefersReducedMotion) {
       console.log('WarpNavigation: Reduced motion - navigating directly');
@@ -20,6 +32,8 @@ export const useWarpNavigation = () => {
     await begin({
       durationMs: 1000,
       cueMs: 700,
+      centerX,
+      centerY,
       onCue: () => {
         console.log('WarpNavigation: Executing navigation to:', target);
         navigate(target);

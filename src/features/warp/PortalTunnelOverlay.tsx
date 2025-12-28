@@ -1,38 +1,50 @@
 import * as React from "react";
-import { Canvas } from "@react-three/fiber";
 import { useWarpController } from "./useWarpController";
-import { SpiralTunnelScene } from "./SpiralTunnelScene";
+import { PortalStage } from "./PortalStage";
+import { RingTunnel } from "./RingTunnel";
+import { OverlayRoot } from "./OverlayRoot";
 import { prefersReducedMotion } from '@/utils/webgl';
 
-export function HyperspaceOverlay() {
+interface PortalTunnelOverlayProps {
+  centerX: number;
+  centerY: number;
+}
+
+export function PortalTunnelOverlay({ centerX, centerY }: PortalTunnelOverlayProps) {
   const { active, complete } = useWarpController();
   const [progress, setProgress] = React.useState(0);
   const [webglError, setWebglError] = React.useState(false);
+  const [overlayOpacity, setOverlayOpacity] = React.useState(0);
+
   const startTimeRef = React.useRef<number>(0);
 
   React.useEffect(() => {
     if (active) {
-      console.log('HyperspaceOverlay: Starting animation');
+      console.log('PortalTunnelOverlay: Starting animation');
       startTimeRef.current = Date.now();
-      
-      // Animate progress from 0 to 1 over 1 second
+
+      // Fade in overlay quickly
+      setOverlayOpacity(1);
+
+      // Animate progress from 0 to 1 over 1.1 seconds for cinematic speed
       const animate = () => {
         const elapsed = Date.now() - startTimeRef.current;
-        const newProgress = Math.min(elapsed / 1000, 1);
+        const newProgress = Math.min(elapsed / 1100, 1);
         setProgress(newProgress);
-        
+
         if (newProgress < 1) {
           requestAnimationFrame(animate);
         } else {
-          console.log('HyperspaceOverlay: Animation complete');
+          console.log('PortalTunnelOverlay: Animation complete');
           complete();
         }
       };
-      
+
       requestAnimationFrame(animate);
     } else {
       setProgress(0);
       setWebglError(false);
+      setOverlayOpacity(0);
     }
   }, [active, complete]);
 
@@ -42,25 +54,22 @@ export function HyperspaceOverlay() {
   // Use fallback for reduced motion preference or WebGL errors
   if (prefersReducedMotion || webglError) {
     return (
-      <div
-        id="warp-overlay"
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 9999,
-          pointerEvents: "none",
-          opacity: active ? 1 : 0,
-          transition: "opacity 150ms ease-out",
-          background: "transparent",
-        }}
-        aria-hidden
-      >
+      <OverlayRoot active={active}>
+        {/* Portal Stage for reduced motion */}
+        <PortalStage 
+          active={active} 
+          progress={progress} 
+          centerX={centerX} 
+          centerY={centerY} 
+        />
+        
+        {/* Simple overlay for reduced motion */}
         <div style={{
           position: "absolute",
           inset: 0,
-          background: `radial-gradient(circle at center, 
-            rgba(128, 0, 255, ${0.3 + progress * 0.4}) 0%, 
-            rgba(64, 0, 128, ${0.2 + progress * 0.3}) 50%, 
+          background: `radial-gradient(circle at ${centerX}px ${centerY}px,
+            rgba(128, 0, 255, ${0.3 + progress * 0.4}) 0%,
+            rgba(64, 0, 128, ${0.2 + progress * 0.3}) 50%,
             rgba(32, 0, 64, ${0.1 + progress * 0.2}) 100%)`,
           transform: `scale(${1 + progress * 0.5})`,
           transition: "all 0.1s linear"
@@ -76,51 +85,31 @@ export function HyperspaceOverlay() {
             opacity: progress
           }} />
         </div>
-      </div>
+      </OverlayRoot>
     );
   }
 
   return (
-    <div
-      id="warp-overlay"
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999,
-        pointerEvents: "none",
-        opacity: active ? 1 : 0,
-        transition: "opacity 220ms ease-out",
-        background: "transparent",
-      }}
-      aria-hidden
-    >
-      <Canvas
-        gl={{
-          antialias: false,
-          powerPreference: 'high-performance',
-          alpha: true,
+    <OverlayRoot active={active}>
+      {/* Layer B: Portal Stage (Home page with growing clip-path) */}
+      <PortalStage 
+        active={active} 
+        progress={progress} 
+        centerX={centerX} 
+        centerY={centerY} 
+      />
+
+      {/* Layer A: Spiral Tunnel Ring */}
+      <RingTunnel
+        centerPx={[centerX, centerY]}
+        innerPx={progress * Math.max(window.innerWidth, window.innerHeight) * 0.8}
+        thicknessPx={80}
+        durationMs={1100}
+        onDone={() => {
+          console.log('RingTunnel: Animation complete');
+          complete();
         }}
-        onCreated={({ gl }) => {
-          gl.setClearColor(0x000000, 0);
-        }}
-        onError={(error) => {
-          console.error('WebGL error:', error);
-          setWebglError(true);
-        }}
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "transparent",
-        }}
-      >
-        <SpiralTunnelScene 
-          progress={progress}
-          onComplete={() => {
-            console.log('SpiralTunnelScene: Animation complete');
-            complete();
-          }}
-        />
-      </Canvas>
-    </div>
+      />
+    </OverlayRoot>
   );
 }

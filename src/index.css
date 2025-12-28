@@ -116,7 +116,7 @@ All colors MUST be HSL.
     --shadow-glow-strong: 0 20px 50px -12px hsl(var(--accent) / 0.65);
   }
 
-.dark {
+  .dark {
     --background: 230 89% 14%;
     --foreground: 0 0% 98%;
 
@@ -159,10 +159,48 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Portal Stage and Warp Overlay Styles */
+.portal-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: transparent;
+  clip-path: circle(var(--r, 0px) at var(--cx, 50%) var(--cy, 50%));
+}
+
+#warp-overlay,
+#warp-overlay canvas {
+  background: transparent !important;
+}
+
+/* Warp stars animation for fallback */
+@keyframes warp-stars {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-100px);
+  }
+}
+
+/* Title drift animation */
+@keyframes title-drift {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+.animate-title-drift {
+  animation: title-drift 8s ease-in-out infinite;
 }
 
 @layer utilities {

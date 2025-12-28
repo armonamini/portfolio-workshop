@@ -1,8 +1,16 @@
 import * as React from "react";
 
-type BeginOpts = { durationMs?: number; cueMs?: number; onCue?: () => void };
+type BeginOpts = { 
+  durationMs?: number; 
+  cueMs?: number; 
+  onCue?: () => void;
+  centerX?: number;
+  centerY?: number;
+};
 type Ctx = {
   active: boolean;
+  centerX: number;
+  centerY: number;
   begin: (o: BeginOpts) => Promise<void>;
   complete: () => void;
 };
@@ -11,6 +19,8 @@ const Ctx = React.createContext<Ctx | null>(null);
 
 export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [active, setActive] = React.useState(false);
+  const [centerX, setCenterX] = React.useState(0);
+  const [centerY, setCenterY] = React.useState(0);
   const resolverRef = React.useRef<(() => void) | null>(null);
   const safetyRef = React.useRef<number | null>(null);
 
@@ -26,11 +36,13 @@ export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     }, 220); // fade-out room
   }, [active]);
 
-  const begin = React.useCallback(({ durationMs = 1050, cueMs = 700, onCue }: BeginOpts) => {
+  const begin = React.useCallback(({ durationMs = 1050, cueMs = 700, onCue, centerX: cx, centerY: cy }: BeginOpts) => {
     console.log('WarpController: begin() called, active:', active);
     if (active) return Promise.resolve(); // ignore double clicks
     console.log('WarpController: Setting active to true');
     setActive(true);
+    if (cx !== undefined) setCenterX(cx);
+    if (cy !== undefined) setCenterY(cy);
     window.setTimeout(() => {
       console.log('WarpController: Executing onCue (navigation)');
       onCue?.();
@@ -46,7 +58,7 @@ export const WarpProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     });
   }, [active, complete]);
 
-  const value = React.useMemo(() => ({ active, begin, complete }), [active, begin, complete]);
+  const value = React.useMemo(() => ({ active, centerX, centerY, begin, complete }), [active, centerX, centerY, begin, complete]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };
 

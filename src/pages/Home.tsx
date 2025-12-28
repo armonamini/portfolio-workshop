@@ -13,7 +13,7 @@ const Home = () => {
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "John",
+    name: "Armon",
     url: canonical,
     jobTitle: "Creative Developer",
   };
@@ -21,16 +21,16 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>John's Portfolio — Home</title>
+        <title>Armon's Portfolio — Home</title>
         <meta
           name="description"
-          content="Welcome to John's portfolio home page with futuristic blue mountains background."
+          content="Welcome to Armon's portfolio home page with futuristic blue mountains background."
         />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content="John's Portfolio — Home" />
+        <meta property="og:title" content="Armon's Portfolio — Home" />
         <meta
           property="og:description"
-          content="Welcome to John's portfolio home page with futuristic blue mountains background."
+          content="Welcome to Armon's portfolio home page with futuristic blue mountains background."
         />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
@@ -48,7 +48,7 @@ const Home = () => {
         {/* Navigation */}
         <nav className="absolute top-0 left-0 right-0 z-10 p-6">
           <div className="container mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-white">John's Portfolio</h1>
+            <h1 className="text-2xl font-bold text-white">Armon's Portfolio</h1>
             <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10">
               <a href="/">Back to Landing</a>
             </Button>

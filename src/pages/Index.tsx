@@ -12,7 +12,7 @@ const Index = () => {
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "John",
+    name: "Armon",
     url: canonical,
     jobTitle: "Creative Developer",
   };
@@ -20,13 +20,13 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>John's Portfolio — Futuristic Vintage</title>
+        <title>Armon's Portfolio — Futuristic Vintage</title>
         <meta
           name="description"
-          content="John's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars."
+          content="Armon's Portfolio home with a futuristic vintage aesthetic and ambient shooting stars."
         />
         <link rel="canonical" href={canonical} />
-        <meta property="og:title" content="John's Portfolio — Futuristic Vintage" />
+        <meta property="og:title" content="Armon's Portfolio — Futuristic Vintage" />
         <meta
           property="og:description"
           content="A minimal home with futuristic vintage vibes and slow shooting stars."
@@ -66,11 +66,11 @@ const Index = () => {
               fontFamily: "'Orbitron', monospace",
               filter: 'drop-shadow(0 6px 30px hsl(var(--accent) / 0.7)) drop-shadow(0 4px 15px hsl(var(--primary) / 0.5))',
               textShadow: '0 0 40px hsl(var(--accent) / 0.8), 0 0 80px hsl(var(--accent) / 0.5), 0 0 120px hsl(var(--accent) / 0.3)',
-              opacity: 1,
+              opacity: 0.06,
               mixBlendMode: 'normal'
             }}
           >
-            John's Portfolio
+            Armon's Portfolio
           </h1>
         </div>
 
@@ -87,7 +87,7 @@ const Index = () => {
                 variant="hero"
                 onClick={(e) => {
                   e.preventDefault();
-                  warpNav.start('/home');
+                  warpNav.start('/home', e.currentTarget);
                 }}
                 aria-label="Go to Home"
               >
