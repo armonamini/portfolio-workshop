@@ -115,47 +115,13 @@ const Portfolio = () => {
         {/* Home Section - with cloud transition at top */}
         <section 
           ref={homeSectionRef}
-          className="relative min-h-screen"
+          className="relative min-h-screen overflow-visible"
           style={{
-            background: 'linear-gradient(to bottom, hsl(230, 89%, 14%) 0%, hsl(210, 70%, 55%) 30%, hsl(200, 75%, 70%) 60%, hsl(195, 80%, 80%) 100%)'
+            background: 'linear-gradient(to bottom, hsl(210, 70%, 55%) 0%, hsl(200, 75%, 70%) 40%, hsl(195, 80%, 80%) 100%)'
           }}
         >
-          {/* Clouds at the top - mirroring the mountains aesthetic */}
+          {/* Clouds at the top - overlapping into landing page */}
           <CloudsTransition />
-          
-          {/* Additional layered clouds for depth */}
-          <div className="absolute inset-x-0 top-16 h-48 pointer-events-none overflow-hidden" aria-hidden="true">
-            <svg
-              className="w-full h-full opacity-50"
-              viewBox="0 0 1200 200"
-              preserveAspectRatio="xMidYMin slice"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <filter id="cloudBlur2" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
-                </filter>
-              </defs>
-              
-              {/* Fluffy white clouds */}
-              <g filter="url(#cloudBlur2)" opacity="0.7">
-                <ellipse cx="150" cy="80" rx="120" ry="50" fill="hsl(0, 0%, 100%)" />
-                <ellipse cx="200" cy="100" rx="80" ry="40" fill="hsl(0, 0%, 98%)" />
-                <ellipse cx="100" cy="90" rx="60" ry="35" fill="hsl(0, 0%, 95%)" />
-                
-                <ellipse cx="500" cy="70" rx="140" ry="55" fill="hsl(0, 0%, 100%)" />
-                <ellipse cx="550" cy="95" rx="90" ry="45" fill="hsl(0, 0%, 97%)" />
-                <ellipse cx="450" cy="85" rx="70" ry="38" fill="hsl(0, 0%, 94%)" />
-                
-                <ellipse cx="900" cy="75" rx="130" ry="52" fill="hsl(0, 0%, 100%)" />
-                <ellipse cx="950" cy="100" rx="85" ry="42" fill="hsl(0, 0%, 96%)" />
-                <ellipse cx="850" cy="88" rx="65" ry="36" fill="hsl(0, 0%, 93%)" />
-                
-                <ellipse cx="1150" cy="85" rx="100" ry="45" fill="hsl(0, 0%, 100%)" />
-                <ellipse cx="1100" cy="95" rx="70" ry="38" fill="hsl(0, 0%, 97%)" />
-              </g>
-            </svg>
-          </div>
 
           {/* Content */}
           <div className="container mx-auto px-4 pt-64 pb-20 text-center">
